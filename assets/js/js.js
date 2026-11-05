@@ -1,611 +1,796 @@
 /**
- * Digital Crazy Hub - AI Integrated Digital Marketing Training Program
- * Main JavaScript Application
- * Rebuilt & Enhanced for Performance, Accessibility, and Mobile UX
+ * Digital Crazy Hub - Central Workshop Configuration
+ * Single Source of Truth for Date, Time, Language, Platform, Pricing, and Contact.
  */
 
-'use strict';
-
-// 1. Mark JavaScript availability
-document.documentElement.classList.add('js');
-
-document.addEventListener('DOMContentLoaded', () => {
-
-	/* ==========================================================================
-	   Scroll Reveal Animations
-	   ========================================================================== */
-	const revealElements = document.querySelectorAll('.reveal, .reveal-group');
-
-	if ('IntersectionObserver' in window) {
-		const revealObserver = new IntersectionObserver((entries, observer) => {
-			entries.forEach(entry => {
-				if (entry.isIntersecting) {
-					entry.target.classList.add('visible');
-					observer.unobserve(entry.target);
-				}
-			});
-		}, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
-
-		revealElements.forEach(el => revealObserver.observe(el));
-	} else {
-		revealElements.forEach(el => el.classList.add('visible'));
-	}
-
-	/* ==========================================================================
-	   Lead Enrollment Form: Validation, Reactive Button & Submission
-	   ========================================================================== */
-	const enrollForm = document.getElementById('enrollForm');
-	const submitBtn = document.getElementById('submitBtn');
-	const formSuccessBanner = document.getElementById('formSuccessBanner');
-	const resetFormBtn = document.getElementById('resetFormBtn');
-
-	if (enrollForm && submitBtn) {
-		const nameInput = document.getElementById('name');
-		const emailInput = document.getElementById('email');
-		const phoneInput = document.getElementById('phone');
-		const profileSelect = document.getElementById('profile');
-
-		const inputs = [nameInput, emailInput, phoneInput, profileSelect].filter(Boolean);
-
-		function isValidEmail(val) {
-			return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
-		}
-
-		function isValidPhone(val) {
-			const clean = val.replace(/[\s\-\(\)\+]/g, '');
-			return clean.length >= 10 && clean.length <= 15 && /^\d+$/.test(clean);
-		}
-
-		function validateField(field, showError = false) {
-			const formGroup = field.closest('.form-group');
-			let isValid = false;
-
-			if (field === nameInput) {
-				isValid = field.value.trim().length >= 2;
-			} else if (field === emailInput) {
-				isValid = isValidEmail(field.value);
-			} else if (field === phoneInput) {
-				isValid = isValidPhone(field.value);
-			} else if (field === profileSelect) {
-				isValid = field.value.trim().length > 0;
-			}
-
-			if (formGroup && showError) {
-				if (!isValid) {
-					formGroup.classList.add('has-error');
-				} else {
-					formGroup.classList.remove('has-error');
-				}
-			} else if (formGroup && isValid) {
-				formGroup.classList.remove('has-error');
-			}
-
-			return isValid;
-		}
-
-		function checkFormValidity() {
-			const isNameValid = nameInput ? nameInput.value.trim().length >= 2 : false;
-			const isEmailValid = emailInput ? isValidEmail(emailInput.value) : false;
-			const isPhoneValid = phoneInput ? isValidPhone(phoneInput.value) : false;
-			const isProfileValid = profileSelect ? profileSelect.value.trim().length > 0 : false;
-
-			const formValid = isNameValid && isEmailValid && isPhoneValid && isProfileValid;
-			// submitBtn.disabled = !formValid;
-			return formValid;
-		}
-
-		inputs.forEach(input => {
-			input.addEventListener('input', () => {
-				validateField(input, false);
-				checkFormValidity();
-			});
-
-			input.addEventListener('blur', () => {
-				if (input.value.trim().length > 0) {
-					validateField(input, true);
-				}
-				checkFormValidity();
-			});
-		});
-
-		// Initial check
-		checkFormValidity();
-
-		// Handle Form Submission
-		enrollForm.addEventListener('submit', (e) => {
-			e.preventDefault();
-
-			let allValid = true;
-			inputs.forEach(input => {
-				const valid = validateField(input, true);
-				if (!valid) allValid = false;
-			});
-
-			if (!allValid) {
-				const firstError = enrollForm.querySelector('.has-error input, .has-error select');
-				if (firstError) firstError.focus();
-				return;
-			}
-
-			// Simulating submission feedback
-			submitBtn.disabled = true;
-			submitBtn.classList.add('is-submitting');
-			const originalText = submitBtn.querySelector('.btn-text').textContent;
-			submitBtn.querySelector('.btn-text').textContent = 'Securing Your Seat...';
-
-			setTimeout(() => {
-				submitBtn.classList.remove('is-submitting');
-				submitBtn.querySelector('.btn-text').textContent = originalText;
-
-				const studentName = nameInput.value.trim();
-				enrollForm.style.display = 'none';
-
-				if (formSuccessBanner) {
-					const successNameSpan = document.getElementById('successStudentName');
-					if (successNameSpan) successNameSpan.textContent = studentName || 'Learner';
-					formSuccessBanner.classList.add('visible');
-				}
-			}, 700);
-		});
-
-		if (resetFormBtn && formSuccessBanner) {
-			resetFormBtn.addEventListener('click', () => {
-				enrollForm.reset();
-				inputs.forEach(input => {
-					const fg = input.closest('.form-group');
-					if (fg) fg.classList.remove('has-error');
-				});
-				formSuccessBanner.classList.remove('visible');
-				enrollForm.style.display = 'flex';
-				checkFormValidity();
-			});
-		}
-	}
-
-	/* ==========================================================================
-	   Curriculum Accordion (Modules & Subitems)
-	   ========================================================================== */
-	const curriculum = document.getElementById('curriculum');
-
-	if (curriculum) {
-		const modules = Array.from(curriculum.querySelectorAll('[data-module]'));
-		const toggleAllBtn = document.getElementById('toggleAllBtn');
-		const searchInput = document.getElementById('curriculumSearch');
-		let allExpanded = false;
-
-		function setExpanded(toggle, panel, expanded) {
-			if (!toggle || !panel) return;
-			toggle.setAttribute('aria-expanded', String(expanded));
-			panel.setAttribute('aria-hidden', String(!expanded));
-		}
-
-		// Configure Module Toggles
-		modules.forEach((module, moduleIndex) => {
-			const toggle = module.querySelector(':scope > [data-module-toggle]');
-			const panel = module.querySelector(':scope > .module-body');
-
-			if (!toggle || !panel) return;
-
-			toggle.type = 'button';
-			panel.id = `curriculum-module-${moduleIndex + 1}`;
-			toggle.setAttribute('aria-controls', panel.id);
-
-			// Module 1 starts open by default
-			const initiallyOpen = moduleIndex === 0;
-			module.classList.toggle('open', initiallyOpen);
-			setExpanded(toggle, panel, initiallyOpen);
-
-			toggle.addEventListener('click', () => {
-				const isCurrentlyOpen = module.classList.contains('open');
-				module.classList.toggle('open', !isCurrentlyOpen);
-				setExpanded(toggle, panel, !isCurrentlyOpen);
-			});
-		});
-
-		// Configure Subitem Toggles
-		curriculum.querySelectorAll('[data-subgroup]').forEach((group, groupIndex) => {
-			const subitems = Array.from(group.querySelectorAll('[data-subitem]'));
-
-			subitems.forEach((subitem, subitemIndex) => {
-				const toggle = subitem.querySelector(':scope > [data-subitem-toggle]');
-				const panel = subitem.querySelector(':scope > .subitem-body');
-
-				if (!toggle || !panel) return;
-
-				toggle.type = 'button';
-				panel.id = `curriculum-subitem-${groupIndex + 1}-${subitemIndex + 1}`;
-				toggle.setAttribute('aria-controls', panel.id);
-
-				// Subitem 1 starts open
-				const initiallyOpen = subitemIndex === 0;
-				subitem.classList.toggle('open', initiallyOpen);
-				setExpanded(toggle, panel, initiallyOpen);
-
-				toggle.addEventListener('click', () => {
-					const isCurrentlyOpen = subitem.classList.contains('open');
-					subitem.classList.toggle('open', !isCurrentlyOpen);
-					setExpanded(toggle, panel, !isCurrentlyOpen);
-				});
-			});
-		});
-
-		// "Expand All / Collapse All" Toolbar Action
-		if (toggleAllBtn) {
-			toggleAllBtn.addEventListener('click', () => {
-				allExpanded = !allExpanded;
-
-				modules.forEach(module => {
-					const toggle = module.querySelector(':scope > [data-module-toggle]');
-					const panel = module.querySelector(':scope > .module-body');
-					module.classList.toggle('open', allExpanded);
-					setExpanded(toggle, panel, allExpanded);
-
-					module.querySelectorAll('[data-subitem]').forEach(subitem => {
-						const subToggle = subitem.querySelector(':scope > [data-subitem-toggle]');
-						const subPanel = subitem.querySelector(':scope > .subitem-body');
-						subitem.classList.toggle('open', allExpanded);
-						setExpanded(subToggle, subPanel, allExpanded);
-					});
-				});
-
-				const btnText = toggleAllBtn.querySelector('.btn-text');
-				if (btnText) {
-					btnText.textContent = allExpanded ? 'Collapse All' : 'Expand All';
-				}
-			});
-		}
-
-		// Curriculum Live Search / Filter
-		if (searchInput) {
-			searchInput.addEventListener('input', (e) => {
-				const query = e.target.value.toLowerCase().trim();
-
-				modules.forEach(module => {
-					const moduleToggle = module.querySelector(':scope > [data-module-toggle]');
-					const modulePanel = module.querySelector(':scope > .module-body');
-					const subitems = Array.from(module.querySelectorAll('[data-subitem]'));
-
-					if (!query) {
-						// Reset visibility
-						module.style.display = '';
-						subitems.forEach(sub => sub.style.display = '');
-						return;
-					}
-
-					let moduleHasMatch = false;
-					const moduleHeaderTitle = moduleToggle ? moduleToggle.textContent.toLowerCase() : '';
-
-					if (moduleHeaderTitle.includes(query)) {
-						moduleHasMatch = true;
-						subitems.forEach(sub => sub.style.display = '');
-					} else {
-						subitems.forEach(sub => {
-							const text = sub.textContent.toLowerCase();
-							if (text.includes(query)) {
-								sub.style.display = '';
-								moduleHasMatch = true;
-								sub.classList.add('open');
-								const sToggle = sub.querySelector('[data-subitem-toggle]');
-								const sPanel = sub.querySelector('.subitem-body');
-								setExpanded(sToggle, sPanel, true);
-							} else {
-								sub.style.display = 'none';
-							}
-						});
-					}
-
-					if (moduleHasMatch) {
-						module.style.display = '';
-						module.classList.add('open');
-						setExpanded(moduleToggle, modulePanel, true);
-					} else {
-						module.style.display = 'none';
-					}
-				});
-			});
-		}
-	}
-
-	/* ==========================================================================
-	   FAQ Accordion
-	   ========================================================================== */
-	const faqItems = document.querySelectorAll('.faq-item');
-	faqItems.forEach((faqItem, idx) => {
-		const questionBtn = faqItem.querySelector('.faq-question');
-		const answerPanel = faqItem.querySelector('.faq-answer');
-
-		if (!questionBtn || !answerPanel) return;
-
-		questionBtn.type = 'button';
-		answerPanel.id = `faq-answer-${idx + 1}`;
-		questionBtn.setAttribute('aria-controls', answerPanel.id);
-		questionBtn.setAttribute('aria-expanded', 'false');
-		answerPanel.setAttribute('aria-hidden', 'true');
-
-		questionBtn.addEventListener('click', () => {
-			const isOpen = faqItem.classList.contains('open');
-
-			// Close others for clean FAQ behavior
-			faqItems.forEach(other => {
-				if (other !== faqItem) {
-					other.classList.remove('open');
-					const ob = other.querySelector('.faq-question');
-					const op = other.querySelector('.faq-answer');
-					if (ob) ob.setAttribute('aria-expanded', 'false');
-					if (op) op.setAttribute('aria-hidden', 'true');
-				}
-			});
-
-			faqItem.classList.toggle('open', !isOpen);
-			questionBtn.setAttribute('aria-expanded', String(!isOpen));
-			answerPanel.setAttribute('aria-hidden', String(isOpen));
-		});
-	});
-
-	/* ==========================================================================
-	   Mobile Sticky Action Bar visibility handling
-	   ========================================================================== */
-	const mobileStickyBar = document.querySelector('.mobile-sticky-bar');
-	const enrollmentSection = document.getElementById('enrollment');
-
-	if (mobileStickyBar && enrollmentSection) {
-		const formObserver = new IntersectionObserver((entries) => {
-			entries.forEach(entry => {
-				// Hide the sticky button when the user is already looking at the form
-				if (entry.isIntersecting) {
-					mobileStickyBar.style.transform = 'translateY(100%)';
-					mobileStickyBar.style.transition = 'transform 0.25s ease';
-				} else {
-					mobileStickyBar.style.transform = 'translateY(0)';
-				}
-			});
-		}, { threshold: 0.15 });
-
-		formObserver.observe(enrollmentSection);
-	}
-
-	/* ==========================================================================
-	   YouTube Video Facade: Clean Lazy Loading (Zero Console Violations on Load)
-	   ========================================================================== */
-	const videoCards = document.querySelectorAll('.video-card[data-video-id]');
-	videoCards.forEach(card => {
-		const videoId = card.getAttribute('data-video-id');
-		const videoTitle = card.getAttribute('data-video-title') || 'Student Story';
-		const frameWrap = card.querySelector('.frame-wrap');
-
-		if (!videoId || !frameWrap) return;
-
-		function loadIframe() {
-			if (frameWrap.querySelector('iframe')) return;
-
-			const iframe = document.createElement('iframe');
-			iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0`;
-			iframe.title = videoTitle;
-			iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure');
-			iframe.setAttribute('allowfullscreen', '');
-
-			frameWrap.innerHTML = '';
-			frameWrap.appendChild(iframe);
-		}
-
-		frameWrap.addEventListener('click', loadIframe);
-		frameWrap.addEventListener('keydown', (e) => {
-			if (e.key === 'Enter' || e.key === ' ') {
-				e.preventDefault();
-				loadIframe();
-			}
-		});
-	});
-
-	/* ==========================================================================
-	   Student Training Gallery & Lightbox Popup Preview Modal
-	   ========================================================================== */
-	const lightboxModal = document.getElementById('imageLightbox');
-	const lightboxImg = document.getElementById('lightboxImg');
-	const lightboxBadge = document.getElementById('lightboxBadge');
-	const lightboxCaption = document.getElementById('lightboxCaption');
-	const lightboxCounter = document.getElementById('lightboxCounter');
-	const lightboxClose = document.getElementById('lightboxClose');
-	const lightboxBackdrop = document.getElementById('lightboxBackdrop');
-	const lightboxPrev = document.getElementById('lightboxPrev');
-	const lightboxNext = document.getElementById('lightboxNext');
-
-	const galleryCards = Array.from(document.querySelectorAll('.gallery-card'));
-	const galleryItems = galleryCards.map(card => ({
-		src: card.getAttribute('data-src'),
-		title: card.getAttribute('data-title'),
-		badge: card.getAttribute('data-badge'),
-		category: card.getAttribute('data-category')
-	}));
-
-	let currentLightboxIndex = 0;
-
-	function updateLightboxContent(index) {
-		if (!galleryItems[index]) return;
-		currentLightboxIndex = index;
-		const item = galleryItems[index];
-
-		lightboxImg.src = item.src;
-		lightboxImg.alt = item.title;
-		if (lightboxBadge) lightboxBadge.textContent = item.badge;
-		if (lightboxCaption) lightboxCaption.textContent = item.title;
-		if (lightboxCounter) lightboxCounter.textContent = `${index + 1} / ${galleryItems.length}`;
-	}
-
-	function openLightbox(index) {
-		if (!lightboxModal || !galleryItems.length) return;
-		updateLightboxContent(index);
-		lightboxModal.removeAttribute('hidden');
-		document.body.style.overflow = 'hidden';
-	}
-
-	function closeLightbox() {
-		if (!lightboxModal) return;
-		lightboxModal.setAttribute('hidden', '');
-		document.body.style.overflow = '';
-	}
-
-	function nextLightbox() {
-		const nextIndex = (currentLightboxIndex + 1) % galleryItems.length;
-		updateLightboxContent(nextIndex);
-	}
-
-	function prevLightbox() {
-		const prevIndex = (currentLightboxIndex - 1 + galleryItems.length) % galleryItems.length;
-		updateLightboxContent(prevIndex);
-	}
-
-	// Gallery Card click & keyboard triggers
-	galleryCards.forEach(card => {
-		card.addEventListener('click', () => {
-			const idx = parseInt(card.getAttribute('data-index'), 10);
-			if (!isNaN(idx)) openLightbox(idx);
-		});
-
-		card.addEventListener('keydown', (e) => {
-			if (e.key === 'Enter' || e.key === ' ') {
-				e.preventDefault();
-				const idx = parseInt(card.getAttribute('data-index'), 10);
-				if (!isNaN(idx)) openLightbox(idx);
-			}
-		});
-	});
-
-	// Benefits card highlight preview triggers
-	const highlightThumbs = document.querySelectorAll('.highlight-thumb[data-preview-index]');
-	highlightThumbs.forEach(thumb => {
-		thumb.addEventListener('click', () => {
-			const idx = parseInt(thumb.getAttribute('data-preview-index'), 10);
-			if (!isNaN(idx)) openLightbox(idx);
-		});
-
-		thumb.addEventListener('keydown', (e) => {
-			if (e.key === 'Enter' || e.key === ' ') {
-				e.preventDefault();
-				const idx = parseInt(thumb.getAttribute('data-preview-index'), 10);
-				if (!isNaN(idx)) openLightbox(idx);
-			}
-		});
-	});
-
-	// Lightbox navigation controls
-	if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
-	if (lightboxBackdrop) lightboxBackdrop.addEventListener('click', closeLightbox);
-	if (lightboxNext) lightboxNext.addEventListener('click', nextLightbox);
-	if (lightboxPrev) lightboxPrev.addEventListener('click', prevLightbox);
-
-	// Lightbox Keyboard navigation
-	window.addEventListener('keydown', (e) => {
-		if (!lightboxModal || lightboxModal.hasAttribute('hidden')) return;
-
-		if (e.key === 'Escape') {
-			closeLightbox();
-		} else if (e.key === 'ArrowRight') {
-			nextLightbox();
-		} else if (e.key === 'ArrowLeft') {
-			prevLightbox();
-		}
-	});
-
-	// Mobile Touch Swipe support for Lightbox
-	let touchStartX = 0;
-	let touchEndX = 0;
-
-	if (lightboxModal) {
-		lightboxModal.addEventListener('touchstart', (e) => {
-			touchStartX = e.changedTouches[0].screenX;
-		}, { passive: true });
-
-		lightboxModal.addEventListener('touchend', (e) => {
-			touchEndX = e.changedTouches[0].screenX;
-			const diff = touchEndX - touchStartX;
-			if (Math.abs(diff) > 45) {
-				if (diff < 0) {
-					nextLightbox();
-				} else {
-					prevLightbox();
-				}
-			}
-		}, { passive: true });
-	}
-
-	// Category Filter Tabs
-	const galleryTabs = document.querySelectorAll('.gallery-tab[data-filter]');
-	const toggleMoreBtn = document.getElementById('galleryToggleMoreBtn');
-	let galleryIsExpanded = false;
-
-	function filterGallery(category) {
-		galleryTabs.forEach(t => {
-			const matches = t.getAttribute('data-filter') === category;
-			t.classList.toggle('active', matches);
-			t.setAttribute('aria-selected', String(matches));
-		});
-
-		if (category === 'all') {
-			galleryCards.forEach((card, idx) => {
-				if (galleryIsExpanded || idx < 12) {
-					card.classList.remove('is-hidden');
-				} else {
-					card.classList.add('is-hidden');
-				}
-			});
-			if (toggleMoreBtn) {
-				toggleMoreBtn.style.display = '';
-				const textSpan = toggleMoreBtn.querySelector('.btn-text');
-				if (textSpan) {
-					textSpan.textContent = galleryIsExpanded ? 'Show Less Moments' : 'View All 42 Training Photos';
-				}
-			}
-		} else {
-			galleryCards.forEach(card => {
-				const cardCat = card.getAttribute('data-category');
-				if (cardCat === category) {
-					card.classList.remove('is-hidden');
-				} else {
-					card.classList.add('is-hidden');
-				}
-			});
-			if (toggleMoreBtn) toggleMoreBtn.style.display = 'none';
-		}
-	}
-
-	galleryTabs.forEach(tab => {
-		tab.addEventListener('click', () => {
-			const filter = tab.getAttribute('data-filter') || 'all';
-			filterGallery(filter);
-		});
-	});
-
-	// "View All 42 Training Photos / Show Less" toggle
-	if (toggleMoreBtn) {
-		toggleMoreBtn.addEventListener('click', () => {
-			galleryIsExpanded = !galleryIsExpanded;
-			toggleMoreBtn.classList.toggle('is-expanded', galleryIsExpanded);
-			const textSpan = toggleMoreBtn.querySelector('.btn-text');
-
-			if (galleryIsExpanded) {
-				galleryCards.forEach(card => card.classList.remove('is-hidden'));
-				if (textSpan) textSpan.textContent = 'Show Less Moments';
-			} else {
-				galleryCards.forEach((card, idx) => {
-					if (idx >= 12) card.classList.add('is-hidden');
-				});
-				if (textSpan) textSpan.textContent = 'View All 42 Training Photos';
-				const galleryElem = document.getElementById('training-gallery');
-				if (galleryElem) galleryElem.scrollIntoView({ behavior: 'smooth' });
-			}
-		});
-	}
-
-	/* ==========================================================================
-	   Back to Top Smooth Scroll
-	   ========================================================================== */
-	const backToTopBtn = document.getElementById('backToTopBtn');
-	if (backToTopBtn) {
-		backToTopBtn.addEventListener('click', (e) => {
-			e.preventDefault();
-			window.scrollTo({ top: 0, behavior: 'smooth' });
-		});
-	}
-
+const WORKSHOP_CONFIG = {
+  title: "₹49 AI-Integrated Digital Marketing Paid Workshop",
+  headline: "49% of Businesses Need Digital Marketing to Grow.",
+  sellingPoint: "100% PRACTICAL DIGITAL MARKETING TRAINING",
+  description: "Learn how to plan and execute powerful digital marketing strategies using SEO, Social Media Marketing, Google Ads, Meta Ads, Content Marketing, Lead Generation, Website Development, Analytics, and AI-Powered Marketing Tools to drive business growth and build a successful digital presence.",
+  
+  // Schedule
+  dateFormatted: "November 5, 2026",
+  day: "Thursday",
+  time: "7:00 PM IST",
+  duration: "3 Hours",
+  targetIsoDate: "2026-11-05T19:00:00+05:30",
+  timezone: "Asia/Kolkata",
+  
+  // Delivery
+  language: "Tamil",
+  platform: "Live on Zoom",
+  
+  // Pricing
+  price: 49,
+  currency: "INR",
+  displayPrice: "₹49",
+  originalPrice: "₹1,999",
+  savePercent: "97% OFF",
+  seatsTotal: 100,
+  
+  // Contact & Support
+  whatsappSupportNumber: "919047700201",
+  supportEmail: "info@digitalcrazyhub.com",
+  whatsappCommunityUrl: "https://chat.whatsapp.com/sample-dch-digital-marketing"
+};
+
+// Auto-populate elements with config attributes
+document.addEventListener("DOMContentLoaded", () => {
+  const elements = {
+    "[data-cfg-date]": WORKSHOP_CONFIG.dateFormatted,
+    "[data-cfg-day]": WORKSHOP_CONFIG.day,
+    "[data-cfg-time]": WORKSHOP_CONFIG.time,
+    "[data-cfg-duration]": WORKSHOP_CONFIG.duration,
+    "[data-cfg-language]": WORKSHOP_CONFIG.language,
+    "[data-cfg-platform]": WORKSHOP_CONFIG.platform,
+    "[data-cfg-price]": WORKSHOP_CONFIG.displayPrice,
+    "[data-cfg-original-price]": WORKSHOP_CONFIG.originalPrice,
+    "[data-cfg-save]": WORKSHOP_CONFIG.savePercent,
+    "[data-cfg-selling-point]": WORKSHOP_CONFIG.sellingPoint
+  };
+
+  Object.entries(elements).forEach(([selector, value]) => {
+    document.querySelectorAll(selector).forEach(el => {
+      el.textContent = value;
+    });
+  });
 });
+/**
+ * Digital Crazy Hub - Real-Time Countdown Timer
+ * Uses WORKSHOP_CONFIG.targetIsoDate and Asia/Kolkata timezone.
+ */
+
+(function () {
+  "use strict";
+
+  function initCountdown() {
+    const targetDateStr = (typeof WORKSHOP_CONFIG !== "undefined" && WORKSHOP_CONFIG.targetIsoDate)
+      ? WORKSHOP_CONFIG.targetIsoDate
+      : "2026-11-05T19:00:00+05:30";
+
+    const targetTime = new Date(targetDateStr).getTime();
+
+    const daysEls = document.querySelectorAll(".timer-days");
+    const hoursEls = document.querySelectorAll(".timer-hours");
+    const minsEls = document.querySelectorAll(".timer-mins");
+    const secsEls = document.querySelectorAll(".timer-secs");
+    const statusEls = document.querySelectorAll(".timer-status");
+
+    function update() {
+      const now = new Date().getTime();
+      const distance = targetTime - now;
+
+      if (distance <= 0) {
+        daysEls.forEach(el => el.textContent = "00");
+        hoursEls.forEach(el => el.textContent = "00");
+        minsEls.forEach(el => el.textContent = "00");
+        secsEls.forEach(el => el.textContent = "00");
+        statusEls.forEach(el => {
+          el.textContent = "Workshop In Session - Joining Closed";
+          el.classList.add("text-danger");
+        });
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((distance % (1000 * 60)) / 1000);
+
+      const pad = (n) => String(n).padStart(2, "0");
+
+      daysEls.forEach(el => el.textContent = pad(days));
+      hoursEls.forEach(el => el.textContent = pad(hours));
+      minsEls.forEach(el => el.textContent = pad(mins));
+      secsEls.forEach(el => el.textContent = pad(secs));
+    }
+
+    update();
+    setInterval(update, 1000);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCountdown);
+  } else {
+    initCountdown();
+  }
+})();
+/**
+ * Digital Crazy Hub - 42 Student Training Gallery & Lightbox Controller
+ * Powers 4 independent horizontal marquee tracks with click-to-preview lightbox modal.
+ * Verified with exact file extensions on disk.
+ */
+
+(function () {
+  "use strict";
+
+  const GALLERY_IMAGES = [
+    // Track 1 (11 images)
+    { src: "assets/images/Training/training/training-01.jpeg", caption: "Hands-on Classroom Training - Practical Digital Marketing" },
+    { src: "assets/images/Training/training/training-02.jpeg", caption: "Practical Digital Marketing Session - Live Strategy" },
+    { src: "assets/images/Training/training/training-03.jpg", caption: "Interactive Student Workshop - Campaign Optimization" },
+    { src: "assets/images/Training/training/training-04.jpg", caption: "Real-world Campaign Demonstration - Analytics & Ads" },
+    { src: "assets/images/Training/training/training-05.jpg", caption: "In-Person Mentorship & Live Q&A Discussion" },
+    { src: "assets/images/Training/vels-college/vels-01.jpg", caption: "Vels University Campus Workshop - Digital Marketing" },
+    { src: "assets/images/Training/vels-college/vels-02.jpg", caption: "Vels College Seminar - Lead Generation & Content Marketing" },
+    { src: "assets/images/Training/vels-college/vels-03.jpg", caption: "Practical SEO & Ads Masterclass at Vels" },
+    { src: "assets/images/Training/vels-college/vels-04.jpg", caption: "Student Engagement & Live Ad Setup at Vels" },
+    { src: "assets/images/Training/vels-college/vels-05.jpg", caption: "Group Training & Certification Moment at Vels" },
+    { src: "assets/images/Training/SNS-college/sns-01.jpg", caption: "SNS College of Technology Seminar - Digital Growth" },
+
+    // Track 2 (11 images)
+    { src: "assets/images/Training/SNS-college/sns-02.jpg", caption: "AI Marketing Tools Workshop at SNS College" },
+    { src: "assets/images/Training/SNS-college/sns-03.jpg", caption: "Hands-on Student Lab Session at SNS College" },
+    { src: "assets/images/Training/SNS-college/sns-04.jpg", caption: "Digital Strategy & Campaign Presentation at SNS" },
+    { src: "assets/images/Training/SNS-college/sns-05.jpg", caption: "Campaign Planning Masterclass at SNS College" },
+    { src: "assets/images/Training/SNS-college/sns-06.jpg", caption: "Campus Auditorium Training Session at SNS" },
+    { src: "assets/images/Training/SNS-college/sns-07.jpeg", caption: "Student Interaction & Career Mentoring at SNS" },
+    { src: "assets/images/Training/SDC-college/SDC-01.png", caption: "SDC College Digital Marketing Workshop - Practical Session" },
+    { src: "assets/images/Training/SDC-college/SDC-02.jpg", caption: "Live Social Media Marketing Lab at SDC" },
+    { src: "assets/images/Training/SDC-college/SDC-03.jpg", caption: "Student Practical Training & Analytics Setup at SDC" },
+    { src: "assets/images/Training/SDC-college/SDC-04.jpg", caption: "Google & Meta Ads Setup Session at SDC" },
+    { src: "assets/images/Training/SDC-college/SDC-05.jpg", caption: "Full Classroom Practical Session at SDC" },
+
+    // Track 3 (10 images)
+    { src: "assets/images/Training/SDC-college/SDC-06.jpg", caption: "AI Tools Demonstration & Live Prompt Engineering at SDC" },
+    { src: "assets/images/Training/SDC-college/SDC-07.jpg", caption: "Interactive Q&A with Students at SDC" },
+    { src: "assets/images/Training/SDC-college/SDC-08.jpg", caption: "Live Case Study Discussion & ROI Analysis at SDC" },
+    { src: "assets/images/Training/SDC-college/SDC-09.jpg", caption: "Real-world Digital Marketing Execution at SDC" },
+    { src: "assets/images/Training/SDC-college/SDC-10.jpg", caption: "Student Mentoring & Practical Project Review at SDC" },
+    { src: "assets/images/Training/SDC-college/SDC-11.jpg", caption: "Group Workshop Finale at SDC College" },
+    { src: "assets/images/Training/Event-SQL/event-sql-01.png", caption: "Tech & Marketing Summit Session - Digital Leadership" },
+    { src: "assets/images/Training/Event-SQL/event-sql-02.jpeg", caption: "Analytics & Performance Marketing Workshop" },
+    { src: "assets/images/Training/Event-SQL/event-sql-03.jpeg", caption: "Practical Tech Training & Live Campaign Demos" },
+    { src: "assets/images/Training/Event-SQL/event-sql-04.jpeg", caption: "Industry Professional Training Session - Growth Hacks" },
+
+    // Track 4 (10 images)
+    { src: "assets/images/Training/Event-SQL/event-sql-05.jpeg", caption: "Corporate Digital Skills Training & Implementation" },
+    { src: "assets/images/Training/Event-SQL/event-sql-06.jpeg", caption: "Hands-on Marketing Tech Demonstration" },
+    { src: "assets/images/Training/Event-SQL/event-sql-07.jpeg", caption: "Live Audience Engagement & Marketing Frameworks" },
+    { src: "assets/images/Training/Event-SQL/event-sql-08.jpeg", caption: "Career Growth & Practical Marketing Guidance" },
+    { src: "assets/images/Training/Event-SQL/event-sql-09.jpeg", caption: "Executive Digital Transformation Session" },
+    { src: "assets/images/Training/Event-SQL/event-sql-10.jpeg", caption: "Growth Marketing & AI Integration Masterclass" },
+    { src: "assets/images/Training/Event-SQL/event-sql-11.jpeg", caption: "Masterclass Group Practical Session" },
+    { src: "assets/images/Training/Event-SQL/event-sql-12.jpeg", caption: "In-depth Campaign Strategy Lecture" },
+    { src: "assets/images/Training/Event-SQL/event-sql-13.jpeg", caption: "Live Student Projects Evaluation & Feedback" },
+    { src: "assets/images/Training/Event-SQL/event-sql-14.jpg", caption: "Certificate Presentation & Achievement Moment" }
+  ];
+
+  let currentLightboxIndex = 0;
+  let lightboxModal = null;
+  let lightboxImg = null;
+  let lightboxCaption = null;
+  let lightboxCounter = null;
+
+  function initGallery() {
+    lightboxModal = document.getElementById("galleryLightbox");
+    lightboxImg = document.getElementById("lightboxImage");
+    lightboxCaption = document.getElementById("lightboxCaption");
+    lightboxCounter = document.getElementById("lightboxCounter");
+
+    // Populate the 4 tracks if they exist
+    populateTrack("marqueeTrack1", GALLERY_IMAGES.slice(0, 11), 0);
+    populateTrack("marqueeTrack2", GALLERY_IMAGES.slice(11, 22), 11);
+    populateTrack("marqueeTrack3", GALLERY_IMAGES.slice(22, 32), 22);
+    populateTrack("marqueeTrack4", GALLERY_IMAGES.slice(32, 42), 32);
+
+    setupLightboxEvents();
+  }
+
+  function populateTrack(trackId, images, globalOffset) {
+    const trackEl = document.getElementById(trackId);
+    if (!trackEl) return;
+
+    // Render items twice for infinite seamless scroll loop
+    const renderItems = (items) => {
+      return items.map((item, idx) => {
+        const globalIdx = globalOffset + idx;
+        return `
+          <div class="marquee-item" data-gallery-index="${globalIdx}">
+            <img src="${item.src}" alt="${item.caption}" loading="lazy" class="marquee-img">
+            <div class="marquee-overlay">
+              <span class="marquee-zoom-icon"><i class="ph ph-magnifying-glass-plus"></i></span>
+              <p class="marquee-cap">${item.caption}</p>
+            </div>
+          </div>
+        `;
+      }).join("");
+    };
+
+    trackEl.innerHTML = renderItems(images) + renderItems(images);
+
+    // Bind click events on marquee items
+    trackEl.querySelectorAll(".marquee-item").forEach(item => {
+      item.addEventListener("click", () => {
+        const idx = parseInt(item.getAttribute("data-gallery-index"), 10);
+        openLightbox(idx);
+      });
+    });
+  }
+
+  function openLightbox(index) {
+    if (!lightboxModal || index < 0 || index >= GALLERY_IMAGES.length) return;
+    currentLightboxIndex = index;
+    updateLightbox();
+    lightboxModal.classList.add("active");
+    lightboxModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeLightbox() {
+    if (!lightboxModal) return;
+    lightboxModal.classList.remove("active");
+    lightboxModal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  function updateLightbox() {
+    const item = GALLERY_IMAGES[currentLightboxIndex];
+    if (!item) return;
+
+    if (lightboxImg) {
+      lightboxImg.src = item.src;
+      lightboxImg.alt = item.caption;
+    }
+    if (lightboxCaption) {
+      lightboxCaption.textContent = item.caption;
+    }
+    if (lightboxCounter) {
+      lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${GALLERY_IMAGES.length}`;
+    }
+  }
+
+  function prevImage() {
+    currentLightboxIndex = (currentLightboxIndex - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length;
+    updateLightbox();
+  }
+
+  function nextImage() {
+    currentLightboxIndex = (currentLightboxIndex + 1) % GALLERY_IMAGES.length;
+    updateLightbox();
+  }
+
+  function setupLightboxEvents() {
+    if (!lightboxModal) return;
+
+    const closeBtn = document.getElementById("lightboxClose");
+    const prevBtn = document.getElementById("lightboxPrev");
+    const nextBtn = document.getElementById("lightboxNext");
+
+    if (closeBtn) closeBtn.addEventListener("click", closeLightbox);
+    if (prevBtn) prevBtn.addEventListener("click", prevImage);
+    if (nextBtn) nextBtn.addEventListener("click", nextImage);
+
+    // Click on backdrop to close
+    lightboxModal.addEventListener("click", (e) => {
+      if (e.target === lightboxModal || e.target.classList.contains("lightbox-backdrop")) {
+        closeLightbox();
+      }
+    });
+
+    // Keyboard navigation
+    document.addEventListener("keydown", (e) => {
+      if (!lightboxModal.classList.contains("active")) return;
+      if (e.key === "Escape") closeLightbox();
+      else if (e.key === "ArrowLeft") prevImage();
+      else if (e.key === "ArrowRight") nextImage();
+    });
+
+    // Mobile touch swipe gestures
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    lightboxModal.addEventListener("touchstart", (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightboxModal.addEventListener("touchend", (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          prevImage();
+        } else {
+          nextImage();
+        }
+      }
+    }
+  }
+
+  window.DCH_GALLERY = {
+    open: openLightbox,
+    close: closeLightbox,
+    images: GALLERY_IMAGES
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initGallery);
+  } else {
+    initGallery();
+  }
+})();
+/**
+ * Digital Crazy Hub - Universal Enrollment Modal & Payment Controller
+ * Triggered by all CTAs across the landing page.
+ */
+
+(function () {
+  "use strict";
+
+  let modal = null;
+  let form = null;
+  let submitBtn = null;
+  let errorEl = null;
+
+  function initEnrollment() {
+    modal = document.getElementById("enrollmentModal");
+    form = document.getElementById("enrollmentForm");
+    submitBtn = document.getElementById("enrollSubmitBtn");
+    errorEl = document.getElementById("enrollFormError");
+
+    // Bind all CTA buttons that open the modal
+    document.querySelectorAll(".btn-enroll, [data-open-enrollment], a[href='#enroll']").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        openModal();
+      });
+    });
+
+    // Close buttons
+    if (modal) {
+      modal.querySelectorAll("[data-close-enrollment], .modal-close").forEach(btn => {
+        btn.addEventListener("click", closeModal);
+      });
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal || e.target.classList.contains("modal-backdrop")) {
+          closeModal();
+        }
+      });
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal && modal.classList.contains("active")) {
+        closeModal();
+      }
+    });
+
+    if (form) {
+      form.addEventListener("submit", handleEnrollSubmit);
+    }
+  }
+
+  function openModal() {
+    if (!modal) return;
+    clearError();
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+
+    // Focus first input
+    const firstInput = modal.querySelector("input[name='name']");
+    if (firstInput) {
+      setTimeout(() => firstInput.focus(), 150);
+    }
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    clearError();
+  }
+
+  function showError(msg) {
+    if (errorEl) {
+      errorEl.textContent = msg;
+      errorEl.classList.remove("d-none");
+    } else {
+      alert(msg);
+    }
+  }
+
+  function clearError() {
+    if (errorEl) {
+      errorEl.textContent = "";
+      errorEl.classList.add("d-none");
+    }
+  }
+
+  function setSubmitting(isSubmitting) {
+    if (!submitBtn) return;
+    if (isSubmitting) {
+      submitBtn.disabled = true;
+      submitBtn.dataset.originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = `
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span>Securing Your Seat...</span>
+      `;
+    } else {
+      submitBtn.disabled = false;
+      if (submitBtn.dataset.originalText) {
+        submitBtn.innerHTML = submitBtn.dataset.originalText;
+      }
+    }
+  }
+
+  async function handleEnrollSubmit(e) {
+    e.preventDefault();
+    clearError();
+
+    const formData = new FormData(form);
+    const name = (formData.get("name") || "").toString().trim();
+    let phone = (formData.get("phone") || "").toString().trim();
+    const email = (formData.get("email") || "").toString().trim();
+    const city = (formData.get("city") || "").toString().trim();
+    const profession = (formData.get("profession") || "").toString().trim();
+
+    // Validation
+    if (name.length < 2) {
+      showError("Please enter your full name (minimum 2 characters).");
+      return;
+    }
+
+    // Clean phone number
+    let cleanPhone = phone.replace(/[^0-9]/g, "");
+    if (cleanPhone.length === 12 && cleanPhone.startsWith("91")) {
+      cleanPhone = cleanPhone.substring(2);
+    } else if (cleanPhone.length === 11 && cleanPhone.startsWith("0")) {
+      cleanPhone = cleanPhone.substring(1);
+    }
+
+    if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+      showError("Please enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showError("Please enter a valid email address.");
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      // 1. Create Order on backend
+      const res = await fetch("backend/api/create-order.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name,
+          phone: cleanPhone,
+          email: email,
+          city: city,
+          profession: profession
+        })
+      });
+
+      const orderData = await res.json();
+
+      if (!orderData.success) {
+        throw new Error(orderData.message || "Failed to initiate workshop enrollment.");
+      }
+
+      // 2. Razorpay Flow
+      const options = {
+        key: orderData.key_id,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "Digital Crazy Hub",
+        description: orderData.workshop?.title || "₹49 Digital Marketing Workshop",
+        image: "assets/images/DCH.png",
+        order_id: orderData.order_id,
+        prefill: {
+          name: orderData.user?.name || name,
+          email: orderData.user?.email || email,
+          contact: orderData.user?.phone || cleanPhone
+        },
+        theme: {
+          color: "#2563eb"
+        },
+        handler: async function (response) {
+          // 3. Payment Succeeded -> Verify Signature on Server
+          await verifyPaymentOnServer({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            enrollment_uuid: orderData.enrollment_uuid
+          });
+        },
+        modal: {
+          ondismiss: function () {
+            setSubmitting(false);
+          }
+        }
+      };
+
+      // Handle Test/Mock Simulation Mode or when Razorpay SDK is unavailable
+      if (orderData.is_mock || typeof window.Razorpay === "undefined") {
+        // In local/test mode without external Razorpay key, simulate seamless completion
+        setTimeout(async () => {
+          await verifyPaymentOnServer({
+            razorpay_order_id: orderData.order_id,
+            razorpay_payment_id: "pay_simulated_" + Math.random().toString(36).substring(2, 10),
+            razorpay_signature: "sig_simulated_" + Math.random().toString(36).substring(2, 15),
+            enrollment_uuid: orderData.enrollment_uuid
+          });
+        }, 800);
+        return;
+      }
+
+      const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", function (failResponse) {
+        setSubmitting(false);
+        const errReason = failResponse.error?.description || "Payment failed or was cancelled.";
+        window.location.href = `payment-failed.html?error=${encodeURIComponent(errReason)}&order=${encodeURIComponent(orderData.order_id)}`;
+      });
+      rzp.open();
+
+    } catch (err) {
+      setSubmitting(false);
+      showError(err.message || "Connection error. Please try again.");
+    }
+  }
+
+  async function verifyPaymentOnServer(payload) {
+    try {
+      const res = await fetch("backend/api/verify-payment.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (data.success && data.redirect_url) {
+        window.location.href = data.redirect_url;
+      } else {
+        window.location.href = data.redirect_url || "payment-failed.html?error=verification_failed";
+      }
+    } catch (e) {
+      window.location.href = "payment-failed.html?error=network_verification_failed";
+    }
+  }
+
+  window.DCH_ENROLLMENT = {
+    open: openModal,
+    close: closeModal
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initEnrollment);
+  } else {
+    initEnrollment();
+  }
+})();
+/**
+ * Digital Crazy Hub - Video Testimonials YouTube Facade Controller
+ * Lazy loads YouTube videos on click to maximize performance, prevent lag,
+ * and eliminate browser permissions-policy and WebGPU adapter console warnings.
+ */
+
+(function () {
+  "use strict";
+
+  function initTestimonials() {
+    const cards = document.querySelectorAll(".yt-facade-card");
+
+    cards.forEach(card => {
+      const videoId = card.getAttribute("data-video-id");
+      if (!videoId) return;
+
+      // Ensure poster background is set if not already inline
+      const thumbEl = card.querySelector(".yt-poster");
+      if (thumbEl && !thumbEl.style.backgroundImage) {
+        thumbEl.style.backgroundImage = `url('https://i.ytimg.com/vi/${videoId}/hqdefault.jpg')`;
+      }
+
+      card.addEventListener("click", function (e) {
+        e.preventDefault();
+        loadVideoPlayer(card, videoId);
+      });
+    });
+  }
+
+  function loadVideoPlayer(container, videoId) {
+    if (container.classList.contains("playing")) return;
+
+    // Create iframe
+    const iframe = document.createElement("iframe");
+    iframe.setAttribute("src", `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`);
+    iframe.setAttribute("title", "Student Success Testimonial");
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure");
+    iframe.setAttribute("allowfullscreen", "true");
+    iframe.className = "yt-embed-iframe";
+
+    // Clear contents and insert player
+    container.innerHTML = "";
+    container.appendChild(iframe);
+    container.classList.add("playing");
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTestimonials);
+  } else {
+    initTestimonials();
+  }
+})();
+/**
+ * Digital Crazy Hub - Main Landing Page Script
+ * Statistics animation, FAQ Accordion, Sticky Bottom Bar, Back to Top, Anchor Scroll
+ */
+
+(function () {
+  "use strict";
+
+  // 1. Stats Counter Animation using IntersectionObserver
+  function initCounters() {
+    const counterElements = document.querySelectorAll(".counter-val");
+    if (!counterElements.length) return;
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.getAttribute("data-target"), 10) || 0;
+          const suffix = el.getAttribute("data-suffix") || "";
+          const prefix = el.getAttribute("data-prefix") || "";
+          const duration = 1600; // ms
+          const start = 0;
+          const startTime = performance.now();
+
+          function step(now) {
+            const progress = Math.min((now - startTime) / duration, 1);
+            // Ease out quad
+            const easeProgress = 1 - (1 - progress) * (1 - progress);
+            const current = Math.floor(start + (target - start) * easeProgress);
+
+            el.textContent = `${prefix}${current.toLocaleString()}${suffix}`;
+
+            if (progress < 1) {
+              requestAnimationFrame(step);
+            } else {
+              el.textContent = `${prefix}${target.toLocaleString()}${suffix}`;
+            }
+          }
+
+          requestAnimationFrame(step);
+          obs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    counterElements.forEach(el => observer.observe(el));
+  }
+
+  // 2. FAQ Accordion
+  function initFAQ() {
+    const faqItems = document.querySelectorAll(".faq-item");
+
+    faqItems.forEach(item => {
+      const questionBtn = item.querySelector(".faq-question");
+      const answerEl = item.querySelector(".faq-answer");
+
+      if (!questionBtn || !answerEl) return;
+
+      questionBtn.addEventListener("click", () => {
+        const isOpen = item.classList.contains("active");
+
+        // Close all other items for clean accordion behavior
+        faqItems.forEach(other => {
+          if (other !== item && other.classList.contains("active")) {
+            other.classList.remove("active");
+            const otherBtn = other.querySelector(".faq-question");
+            const otherAns = other.querySelector(".faq-answer");
+            if (otherBtn) otherBtn.setAttribute("aria-expanded", "false");
+            if (otherAns) otherAns.style.maxHeight = null;
+          }
+        });
+
+        if (isOpen) {
+          item.classList.remove("active");
+          questionBtn.setAttribute("aria-expanded", "false");
+          answerEl.style.maxHeight = null;
+        } else {
+          item.classList.add("active");
+          questionBtn.setAttribute("aria-expanded", "true");
+          answerEl.style.maxHeight = answerEl.scrollHeight + "px";
+        }
+      });
+    });
+  }
+
+  // 3. Sticky Bottom Mobile Bar & Back-to-Top Button
+  function initScrollTriggers() {
+    const stickyBar = document.getElementById("mobileStickyBar");
+    const backToTop = document.getElementById("backToTopBtn");
+    const heroSection = document.getElementById("heroSection");
+
+    window.addEventListener("scroll", () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+
+      // Show/hide sticky mobile bar after 350px
+      if (stickyBar) {
+        if (scrollY > 350) {
+          stickyBar.classList.add("visible");
+        } else {
+          stickyBar.classList.remove("visible");
+        }
+      }
+
+      // Back to top button
+      if (backToTop) {
+        if (scrollY > 500) {
+          backToTop.classList.add("visible");
+        } else {
+          backToTop.classList.remove("visible");
+        }
+      }
+    }, { passive: true });
+
+    if (backToTop) {
+      backToTop.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+  }
+
+  // 4. Smooth Anchor Scrolling
+  function initSmoothScroll() {
+    document.querySelectorAll("a[href^='#']:not([href='#']):not([data-open-enrollment])").forEach(anchor => {
+      anchor.addEventListener("click", function (e) {
+        const targetId = this.getAttribute("href");
+        if (targetId && targetId !== "#") {
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            e.preventDefault();
+            targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }
+      });
+    });
+  }
+
+  // Run on DOM ready
+  function init() {
+    initCounters();
+    initFAQ();
+    initScrollTriggers();
+    initSmoothScroll();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();

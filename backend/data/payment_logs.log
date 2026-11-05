@@ -1,0 +1,2 @@
+[2026-11-04 10:56:09] [ORDER_CREATED] [Order: order_test_b823703c852dc8] {"uuid":"DCH-7551D8E69ED5","amount":4900,"email":"meena@example.com","phone":"9840123456"}
+[2026-11-04 10:56:09] [PAYMENT_SUCCESS] [Order: order_test_b823703c852dc8] {"uuid":"DCH-7551D8E69ED5","payment_id":"pay_test_99999","amount":4900,"email":"meena@example.com","phone":"9840123456"}

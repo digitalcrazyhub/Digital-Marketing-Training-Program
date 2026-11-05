@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Incomplete | Digital Crazy Hub</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/DCH.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="assets/css/main.min.css">
+
+  <style>
+    .failure-wrapper {
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 50px 20px;
+    }
+    .failure-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      max-width: 580px;
+      width: 100%;
+      padding: 44px 36px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
+      text-align: center;
+    }
+    .failure-icon-wrap {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: #fef2f2;
+      color: #dc2626;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      border: 3px solid #fecaca;
+    }
+    .failure-title {
+      font-size: 2rem;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .failure-subtitle {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.55;
+    }
+    .error-reason-box {
+      background: var(--surface-alt);
+      border: 1px solid #fee2e2;
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      font-size: 0.9rem;
+      color: #b91c1c;
+      margin-bottom: 30px;
+      word-break: break-word;
+    }
+    .failure-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 380px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container header-container" style="justify-content: center;">
+      <a href="index.html">
+        <img src="assets/images/DCH.png" alt="Digital Crazy Hub" class="site-logo">
+      </a>
+    </div>
+  </header>
+
+  <main class="failure-wrapper">
+    <div class="failure-card">
+      <div class="failure-icon-wrap">
+        <i class="ph-bold ph-x"></i>
+      </div>
+
+      <h1 class="failure-title">Payment Not Completed</h1>
+      <p class="failure-subtitle">
+        Your payment was not processed or was cancelled. If money was debited from your bank account, please don't worry — banks usually auto-refund within 24-48 hours, or our team can manually verify your transaction.
+      </p>
+
+      <div class="error-reason-box" id="errorReasonDisplay">
+        Reason: Payment could not be completed or timed out.
+      </div>
+
+      <div class="failure-actions">
+        <a href="index.html" class="btn-primary" style="padding: 14px 20px;">
+          <i class="ph-bold ph-arrow-counter-clockwise"></i>
+          <span>Retry Workshop Enrollment (@ ₹49)</span>
+        </a>
+        <a href="https://wa.me/919047700201?text=Hi%20Digital%20Crazy%20Hub,%20my%20workshop%20payment%20failed%20and%20I%20need%20assistance" target="_blank" rel="noopener" class="btn-secondary" style="padding: 14px 20px;">
+          <i class="ph-bold ph-whatsapp-logo" style="color: #25d366;"></i>
+          <span>Contact WhatsApp Support</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const errorMsg = urlParams.get('error');
+      if (errorMsg) {
+        document.getElementById('errorReasonDisplay').textContent = 'Reason: ' + decodeURIComponent(errorMsg);
+      }
+    })();
+  </script>
+</body>
+</html>
+

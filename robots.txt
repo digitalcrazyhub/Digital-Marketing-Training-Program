@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /backend/
+Disallow: /_backup_pre_rebuild/
+Disallow: /thank-you.html
+Disallow: /payment-failed.html
+
+Sitemap: https://digitalcrazyhub.com/training/sitemap.xml
+

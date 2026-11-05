@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enrollment Confirmed | ₹49 AI Digital Marketing Workshop | Digital Crazy Hub</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/DCH.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="assets/css/main.min.css">
+
+  <style>
+    .thankyou-wrapper {
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 50px 20px;
+    }
+    .thankyou-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      max-width: 680px;
+      width: 100%;
+      padding: 44px 36px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
+      text-align: center;
+      position: relative;
+    }
+    .success-icon-wrap {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: #ecfdf5;
+      color: #059669;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      border: 3px solid #a7f3d0;
+      animation: badgeGlow 2s infinite;
+    }
+    .thankyou-title {
+      font-size: 2.2rem;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .thankyou-subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-bottom: 30px;
+    }
+    .order-details-box {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-align: left;
+      margin-bottom: 30px;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 0.95rem;
+    }
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+    .detail-label {
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .detail-val {
+      color: var(--ink);
+      font-weight: 700;
+      text-align: right;
+    }
+    .whatsapp-join-box {
+      background: #f0fdf4;
+      border: 2px dashed #22c55e;
+      border-radius: var(--radius-md);
+      padding: 26px;
+      margin-bottom: 26px;
+    }
+    .btn-whatsapp-join {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: #25d366;
+      color: #ffffff;
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 16px 32px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+      width: 100%;
+      max-width: 440px;
+      transition: var(--transition);
+      margin-top: 14px;
+    }
+    .btn-whatsapp-join:hover {
+      background: #1ebd5b;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+    .action-links-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .unverified-box {
+      padding: 40px 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container header-container" style="justify-content: center;">
+      <a href="index.html">
+        <img src="assets/images/DCH.png" alt="Digital Crazy Hub" class="site-logo">
+      </a>
+    </div>
+  </header>
+
+  <main class="thankyou-wrapper">
+    <div class="thankyou-card" id="thankyouCard">
+      <!-- Loading State -->
+      <div id="loadingState">
+        <div class="spinner-border" style="width: 3rem; height: 3rem; color: var(--blue);" role="status"></div>
+        <p style="margin-top: 20px; font-weight: 600; color: var(--muted);">Verifying your workshop enrollment...</p>
+      </div>
+
+      <!-- Verified Success State -->
+      <div id="verifiedState" class="d-none">
+        <div class="success-icon-wrap">
+          <i class="ph-bold ph-check"></i>
+        </div>
+
+        <h1 class="thankyou-title">Seat Confirmed!</h1>
+        <p class="thankyou-subtitle">
+          Congratulations <strong id="studentNameDisplay">Learner</strong>! Your registration for the ₹49 AI-Integrated Digital Marketing Paid Workshop is confirmed.
+        </p>
+
+        <!-- Order Summary Box -->
+        <div class="order-details-box">
+          <div class="detail-row">
+            <span class="detail-label">Enrollment ID:</span>
+            <span class="detail-val" id="enrollmentUuidDisplay">DCH-XXXXXXXX</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Payment ID:</span>
+            <span class="detail-val" id="paymentIdDisplay">pay_XXXXXXXX</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Workshop Date:</span>
+            <span class="detail-val" id="workshopDateDisplay">November 5, 2026 (Thursday)</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Time:</span>
+            <span class="detail-val" id="workshopTimeDisplay">7:00 PM IST (3 Hours)</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Language & Mode:</span>
+            <span class="detail-val">Tamil • Live on Zoom</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Amount Paid:</span>
+            <span class="detail-val" style="color: var(--success);" id="amountPaidDisplay">₹49 (Paid)</span>
+          </div>
+        </div>
+
+        <!-- WhatsApp VIP Community Box -->
+        <div class="whatsapp-join-box">
+          <h3 style="color: #15803d; font-size: 1.25rem; margin-bottom: 6px;">
+            <i class="ph-bold ph-whatsapp-logo"></i> Step 1 of 1: Join VIP WhatsApp Group
+          </h3>
+          <p style="font-size: 0.92rem; color: #166534; line-height: 1.5;">
+            The Zoom meeting link, workbook checklist, and live session updates are shared exclusively in this private group.
+          </p>
+
+          <a href="#" id="whatsappCommunityBtn" target="_blank" rel="noopener" class="btn-whatsapp-join">
+            <i class="ph-fill ph-whatsapp-logo" style="font-size: 1.5rem;"></i>
+            <span>Join WhatsApp Community Now</span>
+          </a>
+        </div>
+
+        <div class="action-links-row">
+          <a href="#" id="gcalBtn" target="_blank" rel="noopener" class="btn-secondary" style="font-size: 0.95rem;">
+            <i class="ph-bold ph-calendar-plus"></i>
+            <span>Add to Google Calendar</span>
+          </a>
+          <a href="index.html" class="btn-secondary" style="font-size: 0.95rem;">
+            <i class="ph ph-house"></i>
+            <span>Return to Home</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Unverified / Invalid State -->
+      <div id="unverifiedState" class="unverified-box d-none">
+        <div style="font-size: 3rem; color: var(--danger); margin-bottom: 16px;">
+          <i class="ph-bold ph-warning-circle"></i>
+        </div>
+        <h2 style="font-size: 1.8rem; margin-bottom: 10px;">Verification Required</h2>
+        <p style="color: var(--muted); font-size: 0.95rem; margin-bottom: 24px;">
+          No active verified enrollment session was found for this link. If you recently paid, please check your email or contact support.
+        </p>
+        <a href="index.html" class="btn-primary">
+          <span>Go to Workshop Home</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (async function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const uuid = urlParams.get('uuid');
+      const token = urlParams.get('token');
+
+      const loadingEl = document.getElementById('loadingState');
+      const verifiedEl = document.getElementById('verifiedState');
+      const unverifiedEl = document.getElementById('unverifiedState');
+
+      if (!uuid || !token) {
+        loadingEl.classList.add('d-none');
+        unverifiedEl.classList.remove('d-none');
+        return;
+      }
+
+      try {
+        const res = await fetch(`backend/api/verify-status.php?uuid=${encodeURIComponent(uuid)}&token=${encodeURIComponent(token)}`);
+        const data = await res.json();
+
+        loadingEl.classList.add('d-none');
+
+        if (data.verified && data.enrollment) {
+          document.getElementById('studentNameDisplay').textContent = data.enrollment.name || 'Learner';
+          document.getElementById('enrollmentUuidDisplay').textContent = data.enrollment.uuid;
+          document.getElementById('paymentIdDisplay').textContent = data.enrollment.payment_id;
+          document.getElementById('amountPaidDisplay').textContent = (data.enrollment.amount || '₹49') + ' (Paid)';
+
+          if (data.workshop) {
+            document.getElementById('workshopDateDisplay').textContent = `${data.workshop.date} (${data.workshop.day})`;
+            document.getElementById('workshopTimeDisplay').textContent = `${data.workshop.time} (3 Hours)`;
+          }
+
+          if (data.links?.whatsapp_community) {
+            document.getElementById('whatsappCommunityBtn').href = data.links.whatsapp_community;
+          }
+          if (data.links?.google_calendar) {
+            document.getElementById('gcalBtn').href = data.links.google_calendar;
+          }
+
+          verifiedEl.classList.remove('d-none');
+        } else {
+          unverifiedEl.classList.remove('d-none');
+        }
+      } catch (e) {
+        loadingEl.classList.add('d-none');
+        unverifiedEl.classList.remove('d-none');
+      }
+    })();
+  </script>
+</body>
+</html>
+
