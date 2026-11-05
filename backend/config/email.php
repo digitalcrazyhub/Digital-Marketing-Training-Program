@@ -1,13 +1,13 @@
 <?php
 /**
- * Digital Crazy Hub - Mail / SMTP Configuration
+ * Digital Crazy Hub - Email / SMTP Configuration
  */
 
 declare(strict_types=1);
 
 namespace App\Config;
 
-class MailConfig {
+class EmailConfig {
     public static function get(): array {
         return [
             'host'                       => (string)env('SMTP_HOST', 'smtp.hostinger.com'),
@@ -22,3 +22,4 @@ class MailConfig {
     }
 }
 
+class MailConfig extends EmailConfig {}

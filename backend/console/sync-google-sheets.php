@@ -3,7 +3,7 @@
  * Digital Crazy Hub - Offline Google Sheets Synchronization Cron Job
  * 
  * Usage:
- *   CLI: php app/Console/sync-google-sheets.php
+ *   CLI: php backend/console/sync-google-sheets.php
  *   Web: curl "https://training.digitalcrazyhub.com/api/sync-cron.php?secret=CRON_SECRET"
  */
 

@@ -20,8 +20,8 @@ declare(strict_types=1);
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-// Bootstrap application from app/bootstrap.php
-require_once dirname(__DIR__) . '/app/bootstrap.php';
+// Bootstrap application from backend/bootstrap.php
+require_once dirname(__DIR__) . '/backend/bootstrap.php';
 
 use App\Config\AppConfig;
 use App\Config\Database;
@@ -256,7 +256,7 @@ foreach ($pendingTasks as $t) {
 assertTest('TEST 6.1: Offline sync task queued in sync_queue', $taskFound, "Task queued for {$eid3}");
 
 // Execute sync cron script CLI
-$cronScript = dirname(__DIR__) . '/app/Console/sync-google-sheets.php';
+$cronScript = dirname(__DIR__) . '/backend/console/sync-google-sheets.php';
 exec('php ' . escapeshellarg($cronScript), $cronOutput, $cronExitCode);
 assertTest('TEST 6.2: Offline sync cron script executed cleanly', $cronExitCode === 0, "Cron output lines: " . count($cronOutput));
 
@@ -301,9 +301,9 @@ assertTest('TEST 8.1: InvoiceService blocks invoice generation for unpaid enroll
 $storageHtaccess = STORAGE_DIR . '/.htaccess';
 assertTest('TEST 8.2: Storage directory protected by .htaccess', file_exists($storageHtaccess) && strpos(file_get_contents($storageHtaccess), 'denied') !== false, "Direct URL access blocked to storage/");
 
-// Check app/.htaccess exists and blocks direct web access
-$appHtaccess = APP_DIR . '/.htaccess';
-assertTest('TEST 8.3: App directory protected by .htaccess', file_exists($appHtaccess) && strpos(file_get_contents($appHtaccess), 'denied') !== false, "Direct URL access blocked to app/");
+// Check backend/.htaccess exists and blocks direct web access
+$backendHtaccess = BACKEND_DIR . '/.htaccess';
+assertTest('TEST 8.3: Backend directory protected by .htaccess', file_exists($backendHtaccess) && strpos(file_get_contents($backendHtaccess), 'denied') !== false, "Direct URL access blocked to backend/");
 
 // Verify cross-user token mismatch protection
 $crossUserTokenMatch = hash_equals($rec1Actual['verification_token'], $rec4['verification_token']);
@@ -350,3 +350,4 @@ echo "==========================================================" . PHP_EOL . PH
 if ($failed > 0) {
     exit(1);
 }
+

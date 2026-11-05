@@ -1,19 +1,18 @@
 <?php
 /**
- * Digital Crazy Hub - Application Bootstrap & PSR-4 Autoloader
+ * Digital Crazy Hub - Centralized Backend Bootstrap & Autoloader
  */
 
 declare(strict_types=1);
 
-// Prevent multiple bootstrap calls
 if (defined('APP_BOOTSTRAPPED')) {
     return;
 }
 define('APP_BOOTSTRAPPED', true);
 
 define('APP_ROOT', dirname(__DIR__));
-define('APP_DIR', __DIR__);
-define('STORAGE_DIR', APP_ROOT . '/storage');
+define('BACKEND_DIR', __DIR__);
+define('STORAGE_DIR', BACKEND_DIR . '/storage');
 define('PUBLIC_DIR', APP_ROOT . '/public');
 
 // Simple native .env parser
@@ -71,7 +70,7 @@ if (!function_exists('env')) {
     }
 }
 
-// Load .env
+// Load .env from project root
 loadEnv(APP_ROOT . '/.env');
 if (!file_exists(APP_ROOT . '/.env') && file_exists(APP_ROOT . '/.env.example')) {
     loadEnv(APP_ROOT . '/.env.example');
@@ -84,14 +83,16 @@ spl_autoload_register(function (string $class) {
         return;
     }
 
-    // Explicit mappings for prompt-specified file structures
+    // Explicit mappings for centralized backend architecture
     $classMap = [
-        'App\Config\AppConfig'                     => APP_DIR . '/Config/app.php',
-        'App\Config\Database'                      => APP_DIR . '/Config/database.php',
-        'App\Config\RazorpayConfig'                => APP_DIR . '/Config/razorpay.php',
-        'App\Config\GoogleSheetsConfig'            => APP_DIR . '/Config/google-sheets.php',
-        'App\Config\MailConfig'                    => APP_DIR . '/Config/mail.php',
-        'App\Templates\Invoice\InvoicePdfTemplate' => APP_DIR . '/Templates/invoice/invoice-template.php'
+        'App\Config\AppConfig'                     => BACKEND_DIR . '/config/app.php',
+        'App\Config\Database'                      => BACKEND_DIR . '/config/database.php',
+        'App\Config\PaymentConfig'                 => BACKEND_DIR . '/config/payment.php',
+        'App\Config\RazorpayConfig'                => BACKEND_DIR . '/config/payment.php',
+        'App\Config\EmailConfig'                   => BACKEND_DIR . '/config/email.php',
+        'App\Config\MailConfig'                    => BACKEND_DIR . '/config/email.php',
+        'App\Config\GoogleSheetsConfig'            => BACKEND_DIR . '/config/google-sheets.php',
+        'App\Templates\Invoice\InvoicePdfTemplate' => BACKEND_DIR . '/templates/invoices/invoice-template.php'
     ];
 
     if (isset($classMap[$class]) && file_exists($classMap[$class])) {
@@ -102,28 +103,27 @@ spl_autoload_register(function (string $class) {
     $relativeClass = substr($class, strlen($prefix));
     $parts = explode('\\', $relativeClass);
     $className = array_pop($parts);
-    $subDir = !empty($parts) ? implode('/', $parts) . '/' : '';
+    $subDir = !empty($parts) ? strtolower(implode('/', $parts)) . '/' : '';
 
-    // Candidate 1: Standard PSR-4
-    $candidate1 = APP_DIR . '/' . $subDir . $className . '.php';
+    // Candidate 1: standard directory (lowercase subDir + exact ClassName.php)
+    $candidate1 = BACKEND_DIR . '/' . $subDir . $className . '.php';
     if (file_exists($candidate1)) {
         require_once $candidate1;
         return;
     }
 
     // Candidate 2: lowercase filename (e.g. app.php, database.php)
-    $candidate2 = APP_DIR . '/' . $subDir . strtolower($className) . '.php';
+    $candidate2 = BACKEND_DIR . '/' . $subDir . strtolower($className) . '.php';
     if (file_exists($candidate2)) {
         require_once $candidate2;
         return;
     }
 
-    // Candidate 3: kebab-case filename (e.g. invoice-template.php)
+    // Candidate 3: kebab-case filename (e.g. invoice-template.php, google-sheets.php)
     $kebab = strtolower((string)preg_replace('/([a-z])([A-Z])/', '$1-$2', $className));
-    $candidate3 = APP_DIR . '/' . $subDir . $kebab . '.php';
+    $candidate3 = BACKEND_DIR . '/' . $subDir . $kebab . '.php';
     if (file_exists($candidate3)) {
         require_once $candidate3;
         return;
     }
 });
-

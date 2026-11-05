@@ -71,4 +71,3 @@ class Database {
         return self::$syncQueueFile;
     }
 }
-

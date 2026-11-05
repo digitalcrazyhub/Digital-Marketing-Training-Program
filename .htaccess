@@ -5,7 +5,7 @@
     RewriteRule ^(\.env|\.git|\.htaccess) - [F,L]
 
     # Block access to private directories if document root is repository root
-    RewriteRule ^(app|storage|database)/ - [F,L]
+    RewriteRule ^(backend|app|storage|database)/ - [F,L]
 
     # Rewrite all public traffic to /public/ directory if document root is repo root
     RewriteCond %{REQUEST_URI} !^/public/

@@ -22,7 +22,8 @@ class EmailService {
         $toEmail = trim((string)($enrollment['email'] ?? ''));
         $enrollmentId = (string)($enrollment['enrollment_id'] ?? 'DCH-2026-000000');
 
-        $templateData = require APP_DIR . '/Templates/emails/student-confirmation.php';
+        $baseDir = defined('BACKEND_DIR') ? BACKEND_DIR : (defined('APP_DIR') ? APP_DIR : dirname(__DIR__));
+        $templateData = require $baseDir . '/templates/emails/student-confirmation.php';
 
         $subject   = $templateData['subject'];
         $plainText = $templateData['plain'];
@@ -38,7 +39,8 @@ class EmailService {
         $companyEmail = trim((string)($mailConfig['company_notification_email'] ?? 'info@digitalcrazyhub.com'));
         $enrollmentId = (string)($enrollment['enrollment_id'] ?? 'DCH-2026-000000');
 
-        $templateData = require APP_DIR . '/Templates/emails/company-notification.php';
+        $baseDir = defined('BACKEND_DIR') ? BACKEND_DIR : (defined('APP_DIR') ? APP_DIR : dirname(__DIR__));
+        $templateData = require $baseDir . '/templates/emails/company-notification.php';
 
         $subject   = $templateData['subject'];
         $plainText = $templateData['plain'];

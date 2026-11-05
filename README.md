@@ -62,28 +62,38 @@ digital-marketing-training-program/
 │   └── api/                              # Thin Public API Entry Points
 │       ├── create-enrollment.php         # POST: Register Lead (MySQL + Google Sheets)
 │       ├── create-order.php              # POST: Create Razorpay Order
-│       ├── verify-payment.php            # POST: Verify Signature, Captures & Notifies
-│       ├── verify-status.php             # GET: Authorize Thank You Page View
-│       ├── webhook.php                   # POST: Asynchronous Webhook Capture
-│       └── download-invoice.php          # GET: Stream Tax Invoice PDF
+│   ├── api/                              # Thin Entry Gateways Forwarding to /backend/router.php
+│   │   ├── index.php                     # Central API Gateway
+│   │   ├── create-enrollment.php         # POST: Initiate Enrollment & Order
+│   │   ├── create-order.php              # POST: Server-side Order Creation
+│   │   ├── verify-payment.php            # POST: Verify Signature, Captures & Notifies
+│   │   ├── verify-status.php             # GET: Authorize Thank You Page View
+│   │   ├── webhook.php                   # POST: Asynchronous Webhook Capture
+│   │   └── download-invoice.php          # GET: Stream Tax Invoice PDF
+│   │
+│   ├── assets/                           # Frontend Assets (CSS, JS, Images, Video)
+│   ├── .htaccess                         # Public Rewrite & Browser Caching Rules
+│   ├── robots.txt                        # Crawler Directives & Sitemap Reference
+│   └── sitemap.xml                       # Production Sitemap
 │
-├── app/                                  # Private Business Logic (Protected from Web)
-│   ├── bootstrap.php                     # PSR-4 Autoloader & Environment Loader
+├── backend/                              # Centralized Backend Architecture (Private)
+│   ├── bootstrap.php                     # PSR-4 Autoloader & Environment (.env) Loader
+│   ├── router.php                        # Central API Request Dispatcher
 │   ├── .htaccess                         # Direct HTTP Access Denied
 │   │
-│   ├── Config/                           # Specialized Configuration Classes
+│   ├── config/                           # Centralized Configuration
 │   │   ├── app.php                       # Application & Workshop Settings
 │   │   ├── database.php                  # PDO Connection & Resilient Fallback
-│   │   ├── razorpay.php                  # Razorpay Credentials & Secrets
-│   │   ├── google-sheets.php             # Google Sheets API V4 & Formatting
-│   │   └── mail.php                      # Hostinger SMTP & Email Routing
+│   │   ├── payment.php                   # Razorpay Credentials & Secrets
+│   │   ├── email.php                     # Hostinger SMTP & Notification Settings
+│   │   └── google-sheets.php             # Google Sheets API V4 & Formatting
 │   │
-│   ├── Controllers/                      # Request Handlers
+│   ├── controllers/                      # Request Handlers
 │   │   ├── EnrollmentController.php      # Enrollment, Status & Invoice Actions
 │   │   ├── PaymentController.php         # Order Creation & Verification Actions
 │   │   └── WebhookController.php         # Idempotent Razorpay Webhook Action
 │   │
-│   ├── Services/                         # Core Business Logic Services
+│   ├── services/                         # Core Business Logic Services
 │   │   ├── EnrollmentService.php         # Master Orchestrator & Storage Engine
 │   │   ├── RazorpayService.php           # Order Client & HMAC-SHA256 Signatures
 │   │   ├── GoogleSheetsService.php       # Pure PHP RS256 JWT Google Sheets API v4
@@ -91,32 +101,43 @@ digital-marketing-training-program/
 │   │   ├── InvoiceService.php            # Secured Paid-Only Tax Invoice Generator
 │   │   └── RecaptchaService.php          # Google reCAPTCHA v3 Token Verifier
 │   │
-│   ├── Helpers/                          # Reusable Utilities
+│   ├── helpers/                          # Reusable Utilities
 │   │   ├── Security.php                  # Sanitization, Tokens, Rate Limiting
 │   │   ├── Validator.php                 # Strict Input Validation Rules
 │   │   └── Response.php                  # Standardized JSON & File Stream Output
 │   │
-│   ├── Templates/                        # View Templates
+│   ├── middleware/                       # Security & Request Middleware
+│   │   └── SecurityMiddleware.php        # CORS, Headers, Rate Limiting
+│   │
+│   ├── database/                         # Backend Database Schemas & Migrations
+│   │   ├── migrations/                   # Incremental Migration Scripts
+│   │   └── schema/                       # Canonical Schema Files
+│   │
+│   ├── templates/                        # View Templates
 │   │   ├── emails/                       # HTML & Plain Text Email Templates
 │   │   │   ├── student-confirmation.php  # Student Confirmation with Attached PDF
 │   │   │   └── company-notification.php  # Internal Company Lead Alert
-│   │   └── invoice/
+│   │   └── invoices/
 │   │       └── invoice-template.php      # Pure PHP PDF 1.4 Invoice Generator
 │   │
-│   └── Console/                          # CLI Commands & Background Jobs
+│   ├── storage/                          # Private Application Storage
+│   │   ├── .htaccess                     # Direct HTTP Access Denied
+│   │   ├── invoices/                     # Generated Tax Invoice PDFs (INV-*.pdf)
+│   │   ├── logs/                         # Audit Logs, Sync Logs, Email Logs
+│   │   ├── cache/                        # Application Cache
+│   │   ├── queue/                        # Resilient Offline Sync Queue Files
+│   │   └── private/                      # Private Service Account Certificates
+│   │
+│   └── console/                          # CLI Commands & Background Jobs
 │       └── sync-google-sheets.php        # Offline Sync Queue Retry Runner
-│
-├── storage/                              # Private Application Storage
-│   ├── .htaccess                         # Direct HTTP Access Denied
-│   ├── invoices/                         # Generated Tax Invoice PDFs (INV-*.pdf)
-│   ├── logs/                             # Audit Logs, Sync Logs, Email Logs
-│   ├── queue/                            # Resilient Offline Sync Queue Files
-│   └── private/                          # Private Service Account Certificates
 │
 ├── database/                             # Database Schemas & Migrations
 │   ├── .htaccess                         # Direct HTTP Access Denied
 │   ├── database.sql                      # Complete MySQL InnoDB Production Schema
 │   └── migrations/                       # Incremental Migration Scripts
+│
+├── tests/                                # Automated Test Suites
+│   └── test_suite.php                    # 10 Core Scenarios (30/30 Pass)
 │
 ├── .env.example                          # Environment Variables Template
 ├── .gitignore                            # Git Exclusion Rules
@@ -149,26 +170,26 @@ Key variables:
 
 1. **Document Root**:
    - In Hostinger hPanel, set the subdomain document root of `training.digitalcrazyhub.com` to `/public_html/public` (or `/domains/training.digitalcrazyhub.com/public_html/public`).
-   - If your host points directly to the repository root, the included root `.htaccess` and `index.php` will automatically rewrite and serve from `public/` securely without exposing `app/`, `storage/`, or `.env`.
+   - If your host points directly to the repository root, the included root `.htaccess` and `index.php` will automatically rewrite and serve from `public/` securely without exposing `backend/`, `database/`, or `.env`.
 2. **Database Setup**:
    - Create a MySQL database in hPanel.
    - Import `database/database.sql` via phpMyAdmin.
 3. **Set Permissions**:
-   - Ensure `storage/invoices/`, `storage/logs/`, and `storage/queue/` have write permissions (`755` or `775`).
+   - Ensure `backend/storage/invoices/`, `backend/storage/logs/`, and `backend/storage/queue/` have write permissions (`755` or `775`).
 4. **Setup Cron Job**:
    - In hPanel, create a recurring cron job every 10 minutes:
      ```bash
-     php /home/username/public_html/app/Console/sync-google-sheets.php
+     php /home/username/public_html/backend/console/sync-google-sheets.php
      ```
 
 ---
 
 ## 4. Testing
 
-Run the automated test suite verifying all 10 scenarios:
+Run the automated test suite verifying all 10 core scenarios:
 
 ```bash
-php test_restructured_suite.php
+php tests/test_suite.php
 ```
 
-All 29 tests verify complete enrollment, MySQL status updates, Google Sheets sync, HMAC signature verification, PDF invoice generation, dual emails, and Thank You verification.
+All 30 tests verify complete enrollment, MySQL status updates, Google Sheets sync, HMAC signature verification, PDF invoice generation, dual emails, and Thank You verification.
