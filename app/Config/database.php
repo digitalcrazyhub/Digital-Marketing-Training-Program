@@ -40,6 +40,10 @@ class Database {
         self::$connectionAttempted = true;
         $cfg = self::getConfig();
 
+        if (empty($cfg['host']) || $cfg['host'] === 'none') {
+            return null;
+        }
+
         $dsn = "mysql:host={$cfg['host']};port={$cfg['port']};dbname={$cfg['database']};charset={$cfg['charset']}";
 
         $options = [

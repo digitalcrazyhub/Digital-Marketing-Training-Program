@@ -125,12 +125,14 @@ class EmailService {
             }
         }
 
-        // Native mail() fallback
+        // Native mail() fallback (skip if Windows without configured sendmail)
         $sent = false;
-        try {
-            $sent = @mail($toEmail, $subject, $message, implode("\r\n", $headers));
-        } catch (Throwable $e) {
-            error_log("EmailService mail() Error: " . $e->getMessage());
+        if (PHP_OS_FAMILY !== 'Windows' || !empty(ini_get('sendmail_path'))) {
+            try {
+                $sent = @mail($toEmail, $subject, $message, implode("\r\n", $headers));
+            } catch (Throwable $e) {
+                error_log("EmailService mail() Error: " . $e->getMessage());
+            }
         }
 
         return $sent;

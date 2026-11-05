@@ -77,16 +77,53 @@ if (!file_exists(APP_ROOT . '/.env') && file_exists(APP_ROOT . '/.env.example'))
     loadEnv(APP_ROOT . '/.env.example');
 }
 
-// Native PSR-4 Autoloader for App\*
+// Native PSR-4 Autoloader with smart class-to-filename fallback for App\*
 spl_autoload_register(function (string $class) {
     $prefix = 'App\\';
     if (!str_starts_with($class, $prefix)) {
         return;
     }
+
+    // Explicit mappings for prompt-specified file structures
+    $classMap = [
+        'App\Config\AppConfig'                     => APP_DIR . '/Config/app.php',
+        'App\Config\Database'                      => APP_DIR . '/Config/database.php',
+        'App\Config\RazorpayConfig'                => APP_DIR . '/Config/razorpay.php',
+        'App\Config\GoogleSheetsConfig'            => APP_DIR . '/Config/google-sheets.php',
+        'App\Config\MailConfig'                    => APP_DIR . '/Config/mail.php',
+        'App\Templates\Invoice\InvoicePdfTemplate' => APP_DIR . '/Templates/invoice/invoice-template.php'
+    ];
+
+    if (isset($classMap[$class]) && file_exists($classMap[$class])) {
+        require_once $classMap[$class];
+        return;
+    }
+
     $relativeClass = substr($class, strlen($prefix));
-    $file = APP_DIR . '/' . str_replace('\\', '/', $relativeClass) . '.php';
-    if (file_exists($file)) {
-        require_once $file;
+    $parts = explode('\\', $relativeClass);
+    $className = array_pop($parts);
+    $subDir = !empty($parts) ? implode('/', $parts) . '/' : '';
+
+    // Candidate 1: Standard PSR-4
+    $candidate1 = APP_DIR . '/' . $subDir . $className . '.php';
+    if (file_exists($candidate1)) {
+        require_once $candidate1;
+        return;
+    }
+
+    // Candidate 2: lowercase filename (e.g. app.php, database.php)
+    $candidate2 = APP_DIR . '/' . $subDir . strtolower($className) . '.php';
+    if (file_exists($candidate2)) {
+        require_once $candidate2;
+        return;
+    }
+
+    // Candidate 3: kebab-case filename (e.g. invoice-template.php)
+    $kebab = strtolower((string)preg_replace('/([a-z])([A-Z])/', '$1-$2', $className));
+    $candidate3 = APP_DIR . '/' . $subDir . $kebab . '.php';
+    if (file_exists($candidate3)) {
+        require_once $candidate3;
+        return;
     }
 });
 

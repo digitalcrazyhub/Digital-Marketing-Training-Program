@@ -1,15 +1,18 @@
 # Environment configurations
 .env
 
-# Application storage & generated files
-storage/invoices/*.pdf
-storage/logs/*.log
-storage/queue/*.json
+# Application storage & runtime generated files
+storage/invoices/*
+!storage/invoices/.gitkeep
+
+storage/logs/*
+!storage/logs/.gitkeep
+
+storage/queue/*
+!storage/queue/.gitkeep
+
 storage/private/*
 !storage/private/.gitkeep
-!storage/invoices/.gitkeep
-!storage/logs/.gitkeep
-!storage/queue/.gitkeep
 
 # Composer dependencies
 vendor/
@@ -21,4 +24,3 @@ Thumbs.db
 *.bak
 .idea/
 .vscode/
-
