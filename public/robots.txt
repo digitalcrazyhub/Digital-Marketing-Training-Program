@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /storage/
+Disallow: /thank-you.html
+Disallow: /payment-failed.html
+Disallow: /payment-page.html
+
+Sitemap: https://training.digitalcrazyhub.com/sitemap.xml
+

@@ -1,6 +1,7 @@
 /**
- * Digital Crazy Hub - Universal Enrollment Modal & Payment Controller
- * Triggered by all CTAs across the landing page.
+ * Digital Crazy Hub - Universal Enrollment Modal & Form Controller
+ * Validates candidate inputs, triggers server-side enrollment (MySQL + Google Sheets),
+ * and seamlessly redirects to payment checkout.
  */
 
 (function () {
@@ -75,6 +76,7 @@
     if (errorEl) {
       errorEl.textContent = msg;
       errorEl.classList.remove("d-none");
+      errorEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
     } else {
       alert(msg);
     }
@@ -93,8 +95,8 @@
       submitBtn.disabled = true;
       submitBtn.dataset.originalText = submitBtn.innerHTML;
       submitBtn.innerHTML = `
-        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        <span>Securing Your Seat...</span>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:inline-block; width:1rem; height:1rem; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:spin 0.75s linear infinite;"></span>
+        <span>Securing Enrollment...</span>
       `;
     } else {
       submitBtn.disabled = false;
@@ -112,10 +114,10 @@
     const name = (formData.get("name") || "").toString().trim();
     let phone = (formData.get("phone") || "").toString().trim();
     const email = (formData.get("email") || "").toString().trim();
-    const city = (formData.get("city") || "").toString().trim();
-    const profession = (formData.get("profession") || "").toString().trim();
+    const location = (formData.get("location") || formData.get("city") || "").toString().trim();
+    const currentProfile = (formData.get("current_profile") || formData.get("profession") || "").toString().trim();
 
-    // Validation
+    // Client-side validation
     if (name.length < 2) {
       showError("Please enter your full name (minimum 2 characters).");
       return;
@@ -140,106 +142,79 @@
       return;
     }
 
+    if (location.length < 2) {
+      showError("Location is mandatory. Please enter your city or location.");
+      return;
+    }
+
+    if (!currentProfile) {
+      showError("Please select your current profile.");
+      return;
+    }
+
     setSubmitting(true);
 
-    try {
-      // 1. Create Order on backend
-      const res = await fetch("backend/api/create-order.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name,
-          phone: cleanPhone,
-          email: email,
-          city: city,
-          profession: profession
-        })
-      });
-
-      const orderData = await res.json();
-
-      if (!orderData.success) {
-        throw new Error(orderData.message || "Failed to initiate workshop enrollment.");
+    // Optional reCAPTCHA v3 token retrieval
+    let recaptchaToken = "";
+    if (window.grecaptcha && window.RECAPTCHA_SITE_KEY) {
+      try {
+        recaptchaToken = await window.grecaptcha.execute(window.RECAPTCHA_SITE_KEY, { action: "enrollment_submit" });
+      } catch (recaptchaErr) {
+        console.warn("reCAPTCHA execution warning:", recaptchaErr);
       }
-
-      // 2. Razorpay Flow
-      const options = {
-        key: orderData.key_id,
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: "Digital Crazy Hub",
-        description: orderData.workshop?.title || "₹49 Digital Marketing Workshop",
-        image: "assets/images/DCH.png",
-        order_id: orderData.order_id,
-        prefill: {
-          name: orderData.user?.name || name,
-          email: orderData.user?.email || email,
-          contact: orderData.user?.phone || cleanPhone
-        },
-        theme: {
-          color: "#2563eb"
-        },
-        handler: async function (response) {
-          // 3. Payment Succeeded -> Verify Signature on Server
-          await verifyPaymentOnServer({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-            enrollment_uuid: orderData.enrollment_uuid
-          });
-        },
-        modal: {
-          ondismiss: function () {
-            setSubmitting(false);
-          }
-        }
-      };
-
-      // Handle Test/Mock Simulation Mode or when Razorpay SDK is unavailable
-      if (orderData.is_mock || typeof window.Razorpay === "undefined") {
-        // In local/test mode without external Razorpay key, simulate seamless completion
-        setTimeout(async () => {
-          await verifyPaymentOnServer({
-            razorpay_order_id: orderData.order_id,
-            razorpay_payment_id: "pay_simulated_" + Math.random().toString(36).substring(2, 10),
-            razorpay_signature: "sig_simulated_" + Math.random().toString(36).substring(2, 15),
-            enrollment_uuid: orderData.enrollment_uuid
-          });
-        }, 800);
-        return;
-      }
-
-      const rzp = new window.Razorpay(options);
-      rzp.on("payment.failed", function (failResponse) {
-        setSubmitting(false);
-        const errReason = failResponse.error?.description || "Payment failed or was cancelled.";
-        window.location.href = `payment-failed.html?error=${encodeURIComponent(errReason)}&order=${encodeURIComponent(orderData.order_id)}`;
-      });
-      rzp.open();
-
-    } catch (err) {
-      setSubmitting(false);
-      showError(err.message || "Connection error. Please try again.");
     }
-  }
 
-  async function verifyPaymentOnServer(payload) {
+    const leadData = {
+      name: name,
+      phone: cleanPhone,
+      email: email,
+      location: location,
+      city: location,
+      current_profile: currentProfile,
+      profession: currentProfile,
+      recaptcha_token: recaptchaToken
+    };
+
     try {
-      const res = await fetch("backend/api/verify-payment.php", {
+      // Step 1 - Step 4: Submit to server API (Creates MySQL NOT PAID + Google Sheets NOT PAID)
+      const res = await fetch("backend/api/create-enrollment.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(leadData)
       });
 
       const data = await res.json();
 
-      if (data.success && data.redirect_url) {
-        window.location.href = data.redirect_url;
-      } else {
-        window.location.href = data.redirect_url || "payment-failed.html?error=verification_failed";
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || data.error || "Unable to process enrollment. Please try again.");
       }
-    } catch (e) {
-      window.location.href = "payment-failed.html?error=network_verification_failed";
+
+      // Persist lead details with generated enrollment_id
+      leadData.enrollment_id = data.enrollment_id;
+      leadData.order_id = data.order_id || "";
+      leadData.verification_token = data.verification_token || "";
+
+      try {
+        localStorage.setItem("dch_lead_info", JSON.stringify(leadData));
+        localStorage.setItem("dch_active_enrollment", JSON.stringify(data));
+      } catch (_) { }
+
+      // Navigate to checkout with enrollment_id
+      const queryParams = new URLSearchParams({
+        enrollment_id: data.enrollment_id,
+        order_id: data.order_id || "",
+        name: name,
+        email: email,
+        phone: cleanPhone,
+        location: location,
+        current_profile: currentProfile
+      });
+
+      window.location.href = `payment-page.html?${queryParams.toString()}`;
+
+    } catch (err) {
+      setSubmitting(false);
+      showError(err.message || "An error occurred while saving your enrollment. Please try again.");
     }
   }
 
@@ -254,4 +229,3 @@
     initEnrollment();
   }
 })();
-

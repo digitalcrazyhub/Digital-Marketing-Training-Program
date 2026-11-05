@@ -1,0 +1,24 @@
+# Environment configurations
+.env
+
+# Application storage & generated files
+storage/invoices/*.pdf
+storage/logs/*.log
+storage/queue/*.json
+storage/private/*
+!storage/private/.gitkeep
+!storage/invoices/.gitkeep
+!storage/logs/.gitkeep
+!storage/queue/.gitkeep
+
+# Composer dependencies
+vendor/
+
+# OS and Editor generated files
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+.idea/
+.vscode/
+

@@ -76,9 +76,8 @@ class RazorpayClient {
      * Verify Payment Signature server-side using HMAC SHA-256
      */
     public function verifyPaymentSignature(string $orderId, string $paymentId, string $signature): bool {
-        // If simulated test mode
-        if (str_starts_with($orderId, 'order_test_') && ($this->keyId === 'rzp_test_placeholder_key' || empty($this->keySecret))) {
-            return !empty($paymentId) && !empty($signature);
+        if (empty($this->keySecret) || empty($orderId) || empty($paymentId) || empty($signature)) {
+            return false;
         }
 
         $expectedSignature = hash_hmac('sha256', $orderId . '|' . $paymentId, $this->keySecret);

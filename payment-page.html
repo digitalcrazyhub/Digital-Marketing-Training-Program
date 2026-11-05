@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Checkout | ₹49 AI-Integrated Digital Marketing Workshop | Digital Crazy Hub</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/DCH.png">
+
+  <!-- Google Fonts: Poppins & Noto Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Phosphor Icons -->
+  <script src="https://cdn.example.com/v5.3.6/script.js" crossorigin="anonymous"
+    integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC"></script>
+
+  <!-- Razorpay Checkout Script -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="assets/css/main.min.css">
+
+  <style>
+    /* Checkout Page Specific Styles */
+    body {
+      background-color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Checkout Top Banner with Background Image & Light Box */
+    .checkout-hero-banner {
+      position: relative;
+      background-color: #070c18;
+      background-image:
+        radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.25) 0%, transparent 70%),
+        linear-gradient(180deg, rgba(7, 12, 24, 0.85) 0%, rgba(15, 23, 42, 0.92) 100%),
+        url('assets/images/Training/vels-college/vels-01.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #ffffff;
+      padding: 36px 20px 42px;
+      text-align: center;
+      border-bottom: 2px solid rgba(37, 99, 235, 0.4);
+      overflow: hidden;
+    }
+
+    /* Ambient Light Glow behind the Light Box */
+    .checkout-hero-banner::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 720px;
+      height: 260px;
+      background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.35) 0%, rgba(124, 58, 237, 0.15) 50%, transparent 75%);
+      pointer-events: none;
+      filter: blur(40px);
+      z-index: 1;
+    }
+
+    /* Luminous Glass Light Box Container */
+    .checkout-banner-lightbox {
+      position: relative;
+      z-index: 2;
+      max-width: 860px;
+      margin: 0 auto;
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 16px;
+      padding: 24px 28px 22px;
+      box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.45),
+        0 0 35px rgba(37, 99, 235, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transition: var(--transition);
+    }
+
+    .checkout-banner-lightbox:hover {
+      border-color: rgba(147, 197, 253, 0.35);
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.5),
+        0 0 45px rgba(37, 99, 235, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-banner-lightbox-preview {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #93c5fd;
+      border: 1px solid rgba(147, 197, 253, 0.25);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .btn-banner-lightbox-preview:hover {
+      background: rgba(37, 99, 235, 0.25);
+      color: #ffffff;
+      border-color: var(--blue);
+      transform: translateY(-1px);
+    }
+
+    /* Fullscreen Banner Image Lightbox Modal */
+    .banner-img-lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(7, 12, 24, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .banner-img-lightbox.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .banner-img-lightbox-inner {
+      position: relative;
+      max-width: 960px;
+      width: 100%;
+      background: #0f172a;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+      animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .banner-img-lightbox-inner img {
+      width: 100%;
+      height: auto;
+      max-height: 75vh;
+      object-fit: cover;
+      display: block;
+    }
+
+    .banner-img-lightbox-bar {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #090e1a;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .banner-img-lightbox-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 38px;
+      height: 38px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      transition: var(--transition);
+      z-index: 10;
+    }
+
+    .banner-img-lightbox-close:hover {
+      background: #ef4444;
+      color: #ffffff;
+      transform: scale(1.08);
+    }
+
+    .checkout-brand-row {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .checkout-logo {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .checkout-divider {
+      width: 1px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .checkout-badge-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-family: var(--font-heading);
+    }
+
+    .checkout-hero-headline {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+      max-width: 820px;
+      margin: 0 auto;
+      line-height: 1.45;
+    }
+
+    .checkout-hero-sub {
+      font-size: 0.95rem;
+      color: #93c5fd;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    /* Checkout Main Layout */
+    .checkout-main-section {
+      padding: 40px 0 70px;
+      flex: 1;
+    }
+
+    .checkout-container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .checkout-title-wrap {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .checkout-title {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+
+    /* Trust Badges Row */
+    .trust-badges-row {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .trust-seal {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 700;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      color: #334155;
+    }
+
+    .trust-seal i {
+      font-size: 1.05rem;
+    }
+
+    .seal-mcafee i {
+      color: #dc2626;
+    }
+
+    .seal-truste i {
+      color: #16a34a;
+    }
+
+    .seal-norton i {
+      color: #d97706;
+    }
+
+    /* 2-Column Grid */
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 34px;
+      align-items: start;
+    }
+
+    /* Left Column: Form Card */
+    .checkout-card {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    /* Dual Tab Header */
+    .checkout-tabs-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      text-align: center;
+    }
+
+    .tab-step-1 {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #ffffff;
+      padding: 14px 10px;
+      transition: var(--transition);
+    }
+
+    .tab-step-1.tab-completed {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    }
+
+    .tab-step-2 {
+      background: #e11d48;
+      color: #ffffff;
+      padding: 14px 10px;
+      transition: var(--transition);
+    }
+
+    .tab-step-2.tab-active {
+      background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .tab-step-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .tab-step-sub {
+      font-size: 0.72rem;
+      opacity: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    .checkout-card-body {
+      padding: 26px 24px 22px;
+    }
+
+    /* Verified Candidate Card (Instant from Enroll Form) */
+    .candidate-summary-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .candidate-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed #cbd5e1;
+    }
+
+    .candidate-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #059669;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .candidate-badge i {
+      font-size: 1.15rem;
+    }
+
+    .btn-edit-details {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #475569;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: var(--transition);
+    }
+
+    .btn-edit-details:hover {
+      background: #f1f5f9;
+      color: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .candidate-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 14px;
+    }
+
+    .candidate-info-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      color: #64748b;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+    }
+
+    .info-value {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--ink);
+      word-break: break-word;
+    }
+
+    .candidate-edit-wrap {
+      background: #f8fafc;
+      border: 1px dashed #93c5fd;
+      border-radius: 10px;
+      padding: 18px 16px;
+      margin-bottom: 20px;
+    }
+
+    .candidate-edit-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .btn-save-details {
+      background: var(--blue);
+      color: #ffffff;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+      width: 100%;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-save-details:hover {
+      background: #1d4ed8;
+    }
+
+    .input-field-group {
+      margin-bottom: 16px;
+    }
+
+    .input-field-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 5px;
+    }
+
+    .custom-input {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      font-family: inherit;
+      transition: var(--transition);
+      box-sizing: border-box;
+    }
+
+    .custom-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+      outline: none;
+    }
+
+    /* Phone with Indian Flag Prefix */
+    .phone-input-wrap {
+      display: flex;
+      align-items: center;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #ffffff;
+      transition: var(--transition);
+    }
+
+    .phone-input-wrap:focus-within {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .phone-prefix {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+      background: #f8fafc;
+      border-right: 1px solid #cbd5e1;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #334155;
+      height: 46px;
+      box-sizing: border-box;
+    }
+
+    .phone-input-wrap input {
+      border: none;
+      flex: 1;
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    /* Order Summary Table Box */
+    .checkout-order-summary {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 20px 0 22px;
+    }
+
+    .summary-header-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .summary-table-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      padding: 4px 0;
+      color: #334155;
+    }
+
+    .summary-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    /* Big Checkout CTA Button */
+    .btn-complete-order {
+      width: 100%;
+      background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+      color: #ffffff;
+      padding: 16px 20px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(225, 29, 72, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .btn-complete-order:hover {
+      background: linear-gradient(135deg, #be123c 0%, #9f1239 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(225, 29, 72, 0.55);
+    }
+
+    .btn-complete-sub {
+      font-size: 0.75rem;
+      font-weight: 500;
+      opacity: 0.92;
+    }
+
+    .btn-security-sub {
+      text-align: center;
+      font-size: 0.76rem;
+      color: #64748b;
+      margin-top: 10px;
+    }
+
+    /* Razorpay & Payment Logos Box */
+    .payments-powered-box {
+      margin-top: 22px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .payment-icons-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .payment-icon-image {
+      width: 100%;
+      max-width: 380px;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+      border-radius: 8px;
+      filter: drop-shadow(0 2px 6px rgba(15, 23, 42, 0.08));
+      transition: var(--transition);
+    }
+
+    .payment-icon-image:hover {
+      transform: translateY(-2px);
+      filter: drop-shadow(0 4px 12px rgba(15, 23, 42, 0.12));
+    }
+
+    /* Right Column: Workshop Offer Card */
+    .checkout-features-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .workshop-graphic-card {
+      background: linear-gradient(135deg, #0b1120 0%, #1e293b 100%);
+      border-radius: 14px;
+      padding: 24px;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .graphic-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(37, 99, 235, 0.25);
+      color: #93c5fd;
+      border: 1px solid rgba(37, 99, 235, 0.4);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .graphic-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .graphic-tagline {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      line-height: 1.4;
+      margin-bottom: 14px;
+    }
+
+    .graphic-tools-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .graphic-tool-badge {
+      background: rgba(255, 255, 255, 0.12);
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    /* 6 Feature Checkmark Cards */
+    .checkout-check-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
+      transition: var(--transition);
+    }
+
+    .checkout-check-card:hover {
+      border-color: #f97316;
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .checkout-check-icon {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
+    }
+
+    .checkout-check-text {
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: #1e293b;
+      line-height: 1.4;
+    }
+
+    /* Footer */
+    .checkout-footer {
+      background: #090e1a;
+      color: #94a3b8;
+      padding: 30px 20px;
+      font-size: 0.85rem;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: auto;
+    }
+
+    .checkout-footer a {
+      color: #94a3b8;
+      text-decoration: underline;
+    }
+
+    .checkout-footer a:hover {
+      color: #ffffff;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 900px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .checkout-hero-headline {
+        font-size: 1.15rem;
+      }
+
+      .checkout-title {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Dark Header Banner with Background Image & Light Box -->
+  <header class="checkout-hero-banner">
+    <div class="checkout-banner-lightbox">
+      <div class="checkout-brand-row">
+        <a href="index.html" aria-label="Digital Crazy Hub Home">
+          <img src="assets/images/DCH.png" alt="Digital Crazy Hub" class="checkout-logo">
+        </a>
+        <div class="checkout-divider"></div>
+        <span class="checkout-badge-title">Secure Payment</span>
+      </div>
+
+      <h1 class="checkout-hero-headline">
+        You're One Step Away From Becoming a Digital Marketing Pro.<br>
+        Future-Proof Your Career & Business With 100% Practical AI-Integrated Skills.
+      </h1>
+      <p class="checkout-hero-sub">
+        Live 3-Hour Masterclass on Zoom • November 5, 2026 @ 7:00 PM IST • Only ₹49
+      </p>
+
+      <button type="button" class="btn-banner-lightbox-preview" id="openBannerLightbox"
+        title="Preview 100% Practical Live Classroom Training">
+        <i class="ph-bold ph-arrows-out"></i>
+        <span>100% Practical Classroom Training Preview</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Fullscreen Banner Image Lightbox Modal -->
+  <div class="banner-img-lightbox" id="bannerImgLightbox" aria-hidden="true" role="dialog"
+    aria-label="Classroom Training Preview">
+    <div class="banner-img-lightbox-inner">
+      <button type="button" class="banner-img-lightbox-close" id="closeBannerLightbox"
+        aria-label="Close preview">&times;</button>
+      <img src="assets/images/Training/vels-college/vels-01.jpg"
+        alt="Digital Crazy Hub Practical Digital Marketing Training Classroom">
+      <div class="banner-img-lightbox-bar">
+        <span><i class="ph-bold ph-shield-check"></i> Digital Crazy Hub — 100% Practical Training & Secure
+          Checkout</span>
+        <span style="color: #93c5fd; font-size: 0.8rem;">Live Masterclass Session</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Checkout Section -->
+  <main class="checkout-main-section">
+    <div class="checkout-container">
+      <div class="checkout-title-wrap">
+        <h2 class="checkout-title">Complete Your Workshop Enrollment</h2>
+        <div class="trust-badges-row">
+          <div class="trust-seal seal-mcafee">
+            <i class="ph-bold ph-shield-check"></i>
+            <span>McAfee SECURE</span>
+          </div>
+          <div class="trust-seal seal-truste">
+            <i class="ph-bold ph-seal-check"></i>
+            <span>TRUSTe VERIFIED</span>
+          </div>
+          <div class="trust-seal seal-norton">
+            <i class="ph-bold ph-lock-key"></i>
+            <span>Norton SECURED</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-grid">
+        <!-- Left Column: Verified Candidate & Instant Payment Card -->
+        <div class="checkout-form-col">
+          <div class="checkout-card">
+            <!-- Dual Tabs Header -->
+            <div class="checkout-tabs-header">
+              <div class="tab-step-1" id="tabStep1">
+                <div class="tab-step-title" id="tabStep1Title">
+                  <i class="ph-fill ph-check-circle"></i>
+                  <span>1 DETAILS CONFIRMED</span>
+                </div>
+                <div class="tab-step-sub" id="tabStep1Sub">FROM ENROLLMENT FORM</div>
+              </div>
+              <div class="tab-step-2 tab-active" id="tabStep2">
+                <div class="tab-step-title">
+                  <i class="ph-bold ph-credit-card"></i>
+                  <span>2 COMPLETE PAYMENT</span>
+                </div>
+                <div class="tab-step-sub">SECURE RAZORPAY GATEWAY</div>
+              </div>
+            </div>
+
+            <div class="checkout-card-body">
+              <div id="checkoutErrorBox" class="form-error-alert d-none" style="margin-bottom: 16px;"></div>
+
+              <!-- 1. Verified Candidate Details Card (Received Instantly from Enroll Form) -->
+              <div class="candidate-summary-box" id="candidateSummaryBox">
+                <div class="candidate-header-row">
+                  <div class="candidate-badge">
+                    <i class="ph-fill ph-check-circle"></i>
+                    <span>Candidate Information Confirmed</span>
+                  </div>
+                  <button type="button" class="btn-edit-details" id="toggleEditBtn" aria-label="Edit candidate details">
+                    <i class="ph ph-pencil-simple"></i> Edit
+                  </button>
+                </div>
+
+                <div class="candidate-info-grid">
+                  <div class="candidate-info-item">
+                    <span class="info-label">Student Name</span>
+                    <span class="info-value" id="displayCandidateName">Learner</span>
+                  </div>
+                  <div class="candidate-info-item">
+                    <span class="info-label">WhatsApp Number</span>
+                    <span class="info-value" id="displayCandidatePhone">+91 ----------</span>
+                  </div>
+                  <div class="candidate-info-item">
+                    <span class="info-label">Email Address</span>
+                    <span class="info-value" id="displayCandidateEmail">learner@email.com</span>
+                  </div>
+                  <div class="candidate-info-item" id="displayCandidateExtraWrap">
+                    <span class="info-label">Profile / City</span>
+                    <span class="info-value" id="displayCandidateExtra">Working Professional</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. Collapsible Edit Drawer (Hidden by default when details exist) -->
+              <div class="candidate-edit-wrap d-none" id="candidateEditWrap">
+                <div class="candidate-edit-header">
+                  <span><i class="ph-bold ph-user"></i> Update Your Candidate Details</span>
+                  <button type="button" class="btn-edit-details" id="closeEditBtn" style="padding: 2px 8px;">✕
+                    Cancel</button>
+                </div>
+
+                <div class="input-field-group">
+                  <label for="fullNameInput">Full Name *</label>
+                  <input type="text" id="fullNameInput" name="name" class="custom-input" placeholder="Full Name..."
+                    required autocomplete="name">
+                </div>
+
+                <div class="input-field-group">
+                  <label for="emailInput">Email Address *</label>
+                  <input type="email" id="emailInput" name="email" class="custom-input" placeholder="Email Address..."
+                    required autocomplete="email">
+                </div>
+
+                <div class="input-field-group">
+                  <label for="phoneInput">WhatsApp Mobile Number *</label>
+                  <div class="phone-input-wrap">
+                    <span class="phone-prefix">
+                      <span>🇮🇳</span>
+                      <span>+91</span>
+                    </span>
+                    <input type="tel" id="phoneInput" name="phone" placeholder="WhatsApp Number (10 digits)..." required
+                      autocomplete="tel" maxlength="15">
+                  </div>
+                </div>
+
+                <div class="input-field-group">
+                  <label for="cityInput">City / Location (Optional)</label>
+                  <input type="text" id="cityInput" name="city" class="custom-input"
+                    placeholder="e.g. Chennai, Coimbatore, Madurai">
+                </div>
+
+                <div class="input-field-group">
+                  <label for="professionSelect">Current Profile (Optional)</label>
+                  <select id="professionSelect" name="profession" class="custom-input" style="cursor: pointer;">
+                    <option value="Student">College Student / Fresher</option>
+                    <option value="Job Seeker">Job Seeker / Career Switcher</option>
+                    <option value="Working Professional">Working Professional / Marketer</option>
+                    <option value="Business Owner">Business Owner / Entrepreneur</option>
+                    <option value="Freelancer">Freelancer / Consultant</option>
+                    <option value="Content Creator">Content Creator / Influencer</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <button type="button" id="saveEditBtn" class="btn-save-details">
+                  <i class="ph-bold ph-check"></i> Save & Continue to Payment
+                </button>
+              </div>
+
+              <!-- 3. Order Breakdown Table -->
+              <div class="checkout-order-summary">
+                <div class="summary-header-label">PAYMENT BREAKDOWN</div>
+                <div class="summary-table-row">
+                  <span style="font-weight: 600;">₹49 AI-Integrated Digital Marketing Workshop</span>
+                  <span>1</span>
+                  <span style="font-weight: 700;">₹49.00</span>
+                </div>
+                <div style="font-size: 0.78rem; color: #64748b; margin-top: 5px; line-height: 1.4;">
+                  • 3 Hours Live Session on Zoom • November 5, 2026 @ 7:00 PM IST<br>
+                  • Official Certificate, Tax Invoice & VIP WhatsApp Group Access Included
+                </div>
+                <div class="summary-total-row">
+                  <span>Total Payable Amount</span>
+                  <span style="color: #059669; font-size: 1.25rem;">₹49.00</span>
+                </div>
+              </div>
+
+              <!-- 4. Complete Payment Button -->
+              <button type="button" id="completeOrderBtn" class="btn-complete-order">
+                <span class="btn-complete-main"><i class="ph-bold ph-lock-key"></i> Pay ₹49 & Confirm My Seat</span>
+                <span class="btn-complete-sub">Instant Zoom Meeting Access & Tax Invoice</span>
+              </button>
+
+              <p class="btn-security-sub">* 100% Secure & Encrypted 256-Bit SSL Payments *</p>
+            </div>
+          </div>
+
+          <!-- Secure Payments Graphic -->
+          <div class="payments-powered-box">
+            <div class="payment-icons-strip">
+              <img class="payment-icon-image" src="assets/images/payment_secure.png"
+                alt="Payments Powered by Razorpay - UPI, Cards, NetBanking">
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Workshop Benefits & Cards -->
+        <div class="checkout-features-col">
+          <!-- Workshop Graphic Banner -->
+          <div class="workshop-graphic-card">
+            <div class="graphic-badge">
+              <i class="ph ph-sparkle"></i> 100% Practical Training
+            </div>
+            <h3 class="graphic-title">AI-Integrated Digital Marketing Masterclass</h3>
+            <p class="graphic-tagline">
+              Build Smarter, Automate Everything, and Lead the Digital Marketing Revolution with Practical AI
+              Integration.
+            </p>
+            <div class="graphic-tools-row">
+              <span class="graphic-tool-badge">Meta Ads</span>
+              <span class="graphic-tool-badge">Google Ads</span>
+              <span class="graphic-tool-badge">SEO</span>
+              <span class="graphic-tool-badge">ChatGPT</span>
+              <span class="graphic-tool-badge">Midjourney</span>
+              <span class="graphic-tool-badge">GA4</span>
+            </div>
+          </div>
+
+          <!-- 6 Feature Cards (Matching Screenshot) -->
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Master The Fundamentals Of Digital Marketing, Funnels & Lead Generation
+            </div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Create AI-Powered Workflows That Automate Real-World Tasks</div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Connect AI Agents With Your Favorite Tools, Apps, And Business Systems
+            </div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Design And Deploy AI Solutions For Real-World Business Use Cases</div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Gain Hands-On Experience Through 3+ Live Demos, 10+ Guided Exercises &
+              Real-World Projects</div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Master Modern Generative AI Tools And Prompt Engineering Techniques</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Dark Footer -->
+  <footer class="checkout-footer">
+    <div style="margin-bottom: 10px;">
+      <img src="assets/images/DCH.png" alt="Digital Crazy Hub" style="height: 36px; width: auto; object-fit: contain;">
+    </div>
+    <p style="margin: 0 0 6px;">
+      &copy; 2026 Digital Crazy Hub. All rights reserved. Registered under MSME, Government of India.
+    </p>
+    <p style="font-size: 0.76rem; color: #64748b; max-width: 800px; margin: 10px auto 0; line-height: 1.5;">
+      Disclaimer: This site is not a part of the Facebook website or Facebook Inc. Additionally, this site is NOT
+      endorsed by Facebook in any way. FACEBOOK is a trademark of FACEBOOK, Inc. All trademarks and registered
+      trademarks belong to their respective owners.
+    </p>
+  </footer>
+
+  <!-- Checkout & Instant Payment Controller -->
+  <script>
+    (function () {
+      "use strict";
+
+      const submitBtn = document.getElementById("completeOrderBtn");
+      const errorBox = document.getElementById("checkoutErrorBox");
+      const summaryBox = document.getElementById("candidateSummaryBox");
+      const editWrap = document.getElementById("candidateEditWrap");
+      const toggleEditBtn = document.getElementById("toggleEditBtn");
+      const closeEditBtn = document.getElementById("closeEditBtn");
+      const saveEditBtn = document.getElementById("saveEditBtn");
+
+      const fullNameInput = document.getElementById("fullNameInput");
+      const emailInput = document.getElementById("emailInput");
+      const phoneInput = document.getElementById("phoneInput");
+      const cityInput = document.getElementById("cityInput");
+      const professionSelect = document.getElementById("professionSelect");
+
+      const displayName = document.getElementById("displayCandidateName");
+      const displayPhone = document.getElementById("displayCandidatePhone");
+      const displayEmail = document.getElementById("displayCandidateEmail");
+      const displayExtra = document.getElementById("displayCandidateExtra");
+
+      const tabStep1 = document.getElementById("tabStep1");
+      const tabStep1Title = document.getElementById("tabStep1Title");
+      const tabStep1Sub = document.getElementById("tabStep1Sub");
+
+      // Retrieve submitted candidate info from URL query params or localStorage
+      const params = new URLSearchParams(window.location.search);
+      let savedInfo = {};
+      try {
+        savedInfo = JSON.parse(localStorage.getItem("dch_lead_info") || "{}");
+      } catch (_) { }
+
+      let currentLead = {
+        enrollment_id: (params.get("enrollment_id") || savedInfo.enrollment_id || "").trim(),
+        name: (params.get("name") || savedInfo.name || "").trim(),
+        email: (params.get("email") || savedInfo.email || "").trim(),
+        phone: (params.get("phone") || savedInfo.phone || "").trim(),
+        city: (params.get("location") || params.get("city") || savedInfo.location || savedInfo.city || "").trim(),
+        profession: (params.get("current_profile") || params.get("profession") || savedInfo.current_profile || savedInfo.profession || "Working Professional").trim()
+      };
+
+      // Clean phone number format
+      function cleanPhoneNumber(rawPhone) {
+        let p = (rawPhone || "").replace(/[^0-9]/g, "");
+        if (p.length === 12 && p.startsWith("91")) {
+          p = p.substring(2);
+        } else if (p.length === 11 && p.startsWith("0")) {
+          p = p.substring(1);
+        }
+        return p;
+      }
+
+      function formatPhoneDisplay(cleanP) {
+        if (cleanP && cleanP.length === 10) {
+          return `+91 ${cleanP.slice(0, 5)} ${cleanP.slice(5)}`;
+        }
+        return cleanP ? `+91 ${cleanP}` : "Not provided";
+      }
+
+      // Populate input fields
+      function syncInputs() {
+        if (fullNameInput) fullNameInput.value = currentLead.name;
+        if (emailInput) emailInput.value = currentLead.email;
+        if (phoneInput) phoneInput.value = cleanPhoneNumber(currentLead.phone);
+        if (cityInput) cityInput.value = currentLead.city;
+        if (professionSelect && currentLead.profession) professionSelect.value = currentLead.profession;
+      }
+
+      // Update Verified Candidate display card
+      function syncDisplayCard() {
+        const hasDetails = currentLead.name.length >= 2 || cleanPhoneNumber(currentLead.phone).length === 10;
+
+        if (hasDetails) {
+          if (displayName) displayName.textContent = currentLead.name || "Enrolled Learner";
+          if (displayPhone) displayPhone.textContent = formatPhoneDisplay(cleanPhoneNumber(currentLead.phone));
+          if (displayEmail) displayEmail.textContent = currentLead.email || "Email pending";
+
+          let extraStr = currentLead.profession || "Working Professional";
+          if (currentLead.city) {
+            extraStr += ` • ${currentLead.city}`;
+          }
+          if (displayExtra) displayExtra.textContent = extraStr;
+
+          // Mark Tab 1 as confirmed
+          if (tabStep1) tabStep1.classList.add("tab-completed");
+          if (tabStep1Title) tabStep1Title.innerHTML = `<i class="ph-fill ph-check-circle"></i><span>1 DETAILS CONFIRMED</span>`;
+          if (tabStep1Sub) tabStep1Sub.textContent = "FROM ENROLLMENT FORM";
+
+          // Show summary, hide edit drawer
+          if (summaryBox) summaryBox.classList.remove("d-none");
+          if (editWrap) editWrap.classList.add("d-none");
+        } else {
+          // No details submitted yet: show edit inputs so they can provide info
+          if (tabStep1) tabStep1.classList.remove("tab-completed");
+          if (tabStep1Title) tabStep1Title.innerHTML = `<i class="ph-bold ph-user"></i><span>1 YOUR INFO</span>`;
+          if (tabStep1Sub) tabStep1Sub.textContent = "ENTER YOUR DETAILS";
+
+          if (summaryBox) summaryBox.classList.add("d-none");
+          if (editWrap) editWrap.classList.remove("d-none");
+        }
+      }
+
+      // Initialize state
+      syncInputs();
+      syncDisplayCard();
+
+      // Edit drawer toggles
+      if (toggleEditBtn) {
+        toggleEditBtn.addEventListener("click", () => {
+          editWrap.classList.toggle("d-none");
+          if (!editWrap.classList.contains("d-none")) {
+            fullNameInput.focus();
+          }
+        });
+      }
+
+      if (closeEditBtn) {
+        closeEditBtn.addEventListener("click", () => {
+          editWrap.classList.add("d-none");
+        });
+      }
+
+      if (saveEditBtn) {
+        saveEditBtn.addEventListener("click", () => {
+          clearError();
+          const n = fullNameInput.value.trim();
+          const e = emailInput.value.trim();
+          const p = cleanPhoneNumber(phoneInput.value.trim());
+          const c = cityInput.value.trim();
+          const prof = professionSelect.value.trim();
+
+          if (n.length < 2) {
+            showError("Please enter your full name (at least 2 characters).");
+            return;
+          }
+          if (!/^[6-9]\d{9}$/.test(p)) {
+            showError("Please enter a valid 10-digit Indian WhatsApp mobile number.");
+            return;
+          }
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) {
+            showError("Please enter a valid email address.");
+            return;
+          }
+
+          currentLead = { name: n, email: e, phone: p, city: c, profession: prof };
+          try {
+            localStorage.setItem("dch_lead_info", JSON.stringify(currentLead));
+          } catch (_) { }
+
+          syncDisplayCard();
+        });
+      }
+
+      // Banner Image Lightbox Modal Controller
+      const bannerLightbox = document.getElementById("bannerImgLightbox");
+      const openBannerBtn = document.getElementById("openBannerLightbox");
+      const closeBannerBtn = document.getElementById("closeBannerLightbox");
+
+      if (openBannerBtn && bannerLightbox) {
+        openBannerBtn.addEventListener("click", () => {
+          bannerLightbox.classList.add("active");
+          bannerLightbox.setAttribute("aria-hidden", "false");
+          document.body.style.overflow = "hidden";
+        });
+      }
+
+      function closeBannerLightboxModal() {
+        if (!bannerLightbox) return;
+        bannerLightbox.classList.remove("active");
+        bannerLightbox.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      }
+
+      if (closeBannerBtn) {
+        closeBannerBtn.addEventListener("click", closeBannerLightboxModal);
+      }
+
+      if (bannerLightbox) {
+        bannerLightbox.addEventListener("click", (e) => {
+          if (e.target === bannerLightbox) {
+            closeBannerLightboxModal();
+          }
+        });
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && bannerLightbox && bannerLightbox.classList.contains("active")) {
+          closeBannerLightboxModal();
+        }
+      });
+
+      function showError(msg) {
+        if (!errorBox) return;
+        errorBox.textContent = msg;
+        errorBox.classList.remove("d-none");
+        errorBox.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      function clearError() {
+        if (!errorBox) return;
+        errorBox.textContent = "";
+        errorBox.classList.add("d-none");
+      }
+
+      function setLoading(isLoading) {
+        if (!submitBtn) return;
+        if (isLoading) {
+          submitBtn.disabled = true;
+          submitBtn.dataset.origText = submitBtn.innerHTML;
+          submitBtn.innerHTML = `
+            <span class="btn-complete-main"><i class="ph-bold ph-spinner" style="animation: spin 1s linear infinite;"></i> Initiating Secure Payment...</span>
+            <span class="btn-complete-sub">Please wait, connecting to payment gateway...</span>
+          `;
+        } else {
+          submitBtn.disabled = false;
+          if (submitBtn.dataset.origText) {
+            submitBtn.innerHTML = submitBtn.dataset.origText;
+          }
+        }
+      }
+
+      // Handle Instant Payment on CTA Click
+      if (submitBtn) {
+        submitBtn.addEventListener("click", handlePaymentSubmit);
+      }
+
+      async function handlePaymentSubmit(e) {
+        if (e) e.preventDefault();
+        clearError();
+
+        // Get details from currentLead or inputs
+        let name = (currentLead.name || fullNameInput.value).trim();
+        let email = (currentLead.email || emailInput.value).trim();
+        let cleanPhone = cleanPhoneNumber(currentLead.phone || phoneInput.value);
+        let city = (currentLead.city || cityInput.value).trim();
+        let profession = (currentLead.profession || professionSelect.value).trim();
+
+        // Validation
+        if (name.length < 2) {
+          editWrap.classList.remove("d-none");
+          showError("Please provide your full candidate name.");
+          fullNameInput.focus();
+          return;
+        }
+
+        if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+          editWrap.classList.remove("d-none");
+          showError("Please provide a valid 10-digit Indian WhatsApp mobile number.");
+          phoneInput.focus();
+          return;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          editWrap.classList.remove("d-none");
+          showError("Please provide a valid email address for your workshop pass & invoice.");
+          emailInput.focus();
+          return;
+        }
+
+        // Persist verified lead
+        currentLead = { name, email, phone: cleanPhone, city, profession };
+        try {
+          localStorage.setItem("dch_lead_info", JSON.stringify(currentLead));
+        } catch (_) { }
+
+        setLoading(true);
+
+        try {
+          // 1. Create Razorpay Order on server
+          const res = await fetch("backend/api/create-order.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              enrollment_id: currentLead.enrollment_id || "",
+              name: name,
+              phone: cleanPhone,
+              email: email,
+              location: city,
+              city: city,
+              current_profile: profession,
+              profession: profession
+            })
+          });
+
+          const orderData = await res.json();
+
+          if (!orderData.success) {
+            throw new Error(orderData.message || "Failed to initiate workshop order.");
+          }
+
+          const activeEnrollmentId = orderData.enrollment_id || currentLead.enrollment_id || orderData.enrollment_uuid;
+
+          // 2. Razorpay Flow
+          const options = {
+            key: orderData.key_id,
+            amount: orderData.amount,
+            currency: orderData.currency,
+            name: "Digital Crazy Hub",
+            description: orderData.workshop?.title || "₹49 Digital Marketing Workshop",
+            image: "assets/images/DCH.png",
+            order_id: orderData.order_id,
+            prefill: {
+              name: orderData.user?.name || name,
+              email: orderData.user?.email || email,
+              contact: orderData.user?.phone || cleanPhone
+            },
+            theme: {
+              color: "#2563eb"
+            },
+            handler: async function (response) {
+              await verifyPaymentOnServer({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                enrollment_id: activeEnrollmentId
+              });
+            },
+            modal: {
+              ondismiss: function () {
+                setLoading(false);
+              }
+            }
+          };
+
+          // Simulated Test Mode Handler if Mock Keys are active
+          if (orderData.is_mock || typeof window.Razorpay === "undefined") {
+            setTimeout(async () => {
+              await verifyPaymentOnServer({
+                razorpay_order_id: orderData.order_id,
+                razorpay_payment_id: "pay_simulated_" + Math.random().toString(36).substring(2, 10),
+                razorpay_signature: "sig_simulated_" + Math.random().toString(36).substring(2, 15),
+                enrollment_id: activeEnrollmentId
+              });
+            }, 900);
+            return;
+          }
+        }, 900);
+        return;
+      }
+
+      const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", function (failResponse) {
+        setLoading(false);
+        const errReason = failResponse.error?.description || "Payment failed or cancelled.";
+        window.location.href = `payment-failed.html?error=${encodeURIComponent(errReason)}&order=${encodeURIComponent(orderData.order_id)}`;
+      });
+      rzp.open();
+
+    } catch (err) {
+      setLoading(false);
+      showError(err.message || "Connection error. Please try again.");
+    }
+      }
+
+    async function verifyPaymentOnServer(payload) {
+      try {
+        const res = await fetch("backend/api/verify-payment.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (data.success && data.redirect_url) {
+          window.location.href = data.redirect_url;
+        } else {
+          window.location.href = data.redirect_url || "payment-failed.html?error=verification_failed";
+        }
+      } catch (e) {
+        window.location.href = "payment-failed.html?error=network_verification_failed";
+      }
+    }
+    }) ();
+  </script>
+</body>
+
+</html>

@@ -47,7 +47,8 @@
 		rel="stylesheet">
 
 	<!-- Phosphor Icons -->
-	<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+	<script src="https://cdn.example.com/v5.3.6/script.js" crossorigin="anonymous"
+		integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC"></script>
 
 	<!-- Razorpay Checkout Script -->
 	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -151,6 +152,10 @@
 							<video autoplay loop muted playsinline preload="auto" class="hero-banner-video"
 								disablepictureinpicture controlslist="nodownload nofullscreen noremoteplayback">
 								<source src="assets/video/banner-video.mp4" type="video/mp4">
+								<track label="English" kind="captions" srclang="en" src="resources/myvideo-en.vtt"
+									default>
+								<track label="Deutsch" kind="captions" srclang="de" src="resources/myvideo-de.vtt">
+								<track label="Español" kind="captions" srclang="es" src="resources/myvideo-es.vtt">
 								Your browser does not support the video tag.
 							</video>
 						</div>
@@ -1090,14 +1095,15 @@
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="studentCity">City / Location</label>
-						<input type="text" id="studentCity" name="city" class="form-input"
-							placeholder="e.g. Chennai, Coimbatore, Madurai">
+						<label class="form-label" for="studentCity">Location / City *</label>
+						<input type="text" id="studentCity" name="location" class="form-input"
+							placeholder="e.g. Chennai, Coimbatore, Madurai" required>
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="studentProfession">Your Current Profile</label>
-						<select id="studentProfession" name="profession" class="form-select">
+						<label class="form-label" for="studentProfession">Your Current Profile *</label>
+						<select id="studentProfession" name="current_profile" class="form-select" required>
+							<option value="">-- Select Your Profile --</option>
 							<option value="Student">College Student / Fresher</option>
 							<option value="Job Seeker">Job Seeker / Career Switcher</option>
 							<option value="Working Professional">Working Professional / Marketer</option>
@@ -1109,8 +1115,8 @@
 					</div>
 
 					<button type="submit" id="enrollSubmitBtn" class="btn-primary btn-modal-submit">
-						<i class="ph-bold ph-lock-key"></i>
-						<span>Proceed to Secure Pay @ ₹49</span>
+						<span>Proceed to Payment Checkout @ ₹49</span>
+						<i class="ph-bold ph-arrow-right"></i>
 					</button>
 				</form>
 

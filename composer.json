@@ -1,0 +1,20 @@
+{
+  "name": "digitalcrazyhub/training-program",
+  "description": "Digital Crazy Hub - Digital Marketing Training Program & Enrollment Automation System",
+  "type": "project",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.1",
+    "ext-pdo": "*",
+    "ext-openssl": "*",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  }
+}
+

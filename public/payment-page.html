@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Checkout | ₹49 AI-Integrated Digital Marketing Workshop | Digital Crazy Hub</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/DCH.png">
+
+  <!-- Google Fonts: Poppins & Noto Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+
+  <!-- Razorpay Checkout Script -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <!-- Modular Stylesheets (Zero Large Inline CSS) -->
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/reset.css">
+  <link rel="stylesheet" href="assets/css/global.css">
+  <link rel="stylesheet" href="assets/css/header.css">
+  <link rel="stylesheet" href="assets/css/payment.css">
+  <link rel="stylesheet" href="assets/css/footer.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+
+<body>
+
+  <!-- Top Dark Header Banner with Background Image & Light Box -->
+  <header class="checkout-hero-banner">
+    <div class="checkout-banner-lightbox">
+      <div class="checkout-brand-row">
+        <a href="index.html" aria-label="Digital Crazy Hub Home">
+          <img src="assets/images/DCH.png" alt="Digital Crazy Hub" class="checkout-logo">
+        </a>
+        <div class="checkout-divider"></div>
+        <span class="checkout-badge-title">Secure Payment</span>
+      </div>
+
+      <h1 class="checkout-hero-headline">
+        You're One Step Away From Becoming a Digital Marketing Pro.<br>
+        Future-Proof Your Career & Business With 100% Practical AI-Integrated Skills.
+      </h1>
+      <p class="checkout-hero-sub">
+        Live 3-Hour Masterclass on Zoom • November 5, 2026 @ 7:00 PM IST • Only ₹49
+      </p>
+
+      <button type="button" class="btn-banner-lightbox-preview" id="openBannerLightbox" title="Preview 100% Practical Live Classroom Training">
+        <i class="ph-bold ph-arrows-out"></i>
+        <span>100% Practical Classroom Training Preview</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Fullscreen Banner Image Lightbox Modal -->
+  <div class="banner-img-lightbox" id="bannerImgLightbox" aria-hidden="true" role="dialog" aria-label="Classroom Training Preview">
+    <div class="banner-img-lightbox-inner">
+      <button type="button" class="banner-img-lightbox-close" id="closeBannerLightbox" aria-label="Close preview">&times;</button>
+      <img src="assets/images/Training/vels-college/vels-01.jpg" alt="Digital Crazy Hub Practical Digital Marketing Training Classroom">
+      <div class="banner-img-lightbox-bar">
+        <span><i class="ph-bold ph-shield-check"></i> Digital Crazy Hub — 100% Practical Training & Secure Checkout</span>
+        <span style="color: #93c5fd; font-size: 0.8rem;">Live Masterclass Session</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Checkout Section -->
+  <main class="checkout-main-section">
+    <div class="checkout-container">
+      <div class="checkout-title-wrap">
+        <h2 class="checkout-title">Complete Your Workshop Enrollment</h2>
+        <div class="trust-badges-row">
+          <div class="trust-seal seal-mcafee">
+            <i class="ph-bold ph-shield-check"></i>
+            <span>McAfee SECURE</span>
+          </div>
+          <div class="trust-seal seal-truste">
+            <i class="ph-bold ph-seal-check"></i>
+            <span>TRUSTe VERIFIED</span>
+          </div>
+          <div class="trust-seal seal-norton">
+            <i class="ph-bold ph-lock-key"></i>
+            <span>Norton SECURED</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-grid">
+        <!-- Left Column: Verified Candidate & Instant Payment Card -->
+        <div class="checkout-form-col">
+          <div class="checkout-card">
+            <!-- Dual Tabs Header -->
+            <div class="checkout-tabs-header">
+              <div class="tab-step-1" id="tabStep1">
+                <div class="tab-step-title" id="tabStep1Title">
+                  <i class="ph-fill ph-check-circle"></i>
+                  <span>1 DETAILS CONFIRMED</span>
+                </div>
+                <div class="tab-step-sub" id="tabStep1Sub">FROM ENROLLMENT FORM</div>
+              </div>
+              <div class="tab-step-2 tab-active" id="tabStep2">
+                <div class="tab-step-title">
+                  <i class="ph-bold ph-credit-card"></i>
+                  <span>2 COMPLETE PAYMENT</span>
+                </div>
+                <div class="tab-step-sub">SECURE RAZORPAY GATEWAY</div>
+              </div>
+            </div>
+
+            <div class="checkout-card-body">
+              <div id="checkoutErrorBox" class="form-error-alert d-none" style="margin-bottom: 16px;"></div>
+
+              <!-- 1. Verified Candidate Details Card (Received Instantly from Enroll Form) -->
+              <div class="candidate-summary-box" id="candidateSummaryBox">
+                <div class="candidate-header-row">
+                  <div class="candidate-badge">
+                    <i class="ph-fill ph-check-circle"></i>
+                    <span>Candidate Information Confirmed</span>
+                  </div>
+                  <button type="button" class="btn-edit-details" id="toggleEditBtn" aria-label="Edit candidate details">
+                    <i class="ph ph-pencil-simple"></i> Edit
+                  </button>
+                </div>
+
+                <div class="candidate-info-grid">
+                  <div class="candidate-info-item">
+                    <span class="info-label">Student Name</span>
+                    <span class="info-value" id="displayCandidateName">Learner</span>
+                  </div>
+                  <div class="candidate-info-item">
+                    <span class="info-label">WhatsApp Number</span>
+                    <span class="info-value" id="displayCandidatePhone">+91 ----------</span>
+                  </div>
+                  <div class="candidate-info-item">
+                    <span class="info-label">Email Address</span>
+                    <span class="info-value" id="displayCandidateEmail">learner@email.com</span>
+                  </div>
+                  <div class="candidate-info-item" id="displayCandidateExtraWrap">
+                    <span class="info-label">Profile / City</span>
+                    <span class="info-value" id="displayCandidateExtra">Working Professional</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. Collapsible Edit Drawer (Hidden by default when details exist) -->
+              <div class="candidate-edit-wrap d-none" id="candidateEditWrap">
+                <div class="candidate-edit-header">
+                  <span><i class="ph-bold ph-user"></i> Update Your Candidate Details</span>
+                  <button type="button" class="btn-edit-details" id="closeEditBtn" style="padding: 2px 8px;">✕
+                    Cancel</button>
+                </div>
+
+                <div class="input-field-group">
+                  <label for="fullNameInput">Full Name *</label>
+                  <input type="text" id="fullNameInput" name="name" class="custom-input" placeholder="Full Name..."
+                    required autocomplete="name">
+                </div>
+
+                <div class="input-field-group">
+                  <label for="emailInput">Email Address *</label>
+                  <input type="email" id="emailInput" name="email" class="custom-input" placeholder="Email Address..."
+                    required autocomplete="email">
+                </div>
+
+                <div class="input-field-group">
+                  <label for="phoneInput">WhatsApp Mobile Number *</label>
+                  <div class="phone-input-wrap">
+                    <span class="phone-prefix">
+                      <span>🇮🇳</span>
+                      <span>+91</span>
+                    </span>
+                    <input type="tel" id="phoneInput" name="phone" placeholder="WhatsApp Number (10 digits)..." required
+                      autocomplete="tel" maxlength="15">
+                  </div>
+                </div>
+
+                <div class="input-field-group">
+                  <label for="cityInput">City / Location (Optional)</label>
+                  <input type="text" id="cityInput" name="city" class="custom-input"
+                    placeholder="e.g. Chennai, Coimbatore, Madurai">
+                </div>
+
+                <div class="input-field-group">
+                  <label for="professionSelect">Current Profile (Optional)</label>
+                  <select id="professionSelect" name="profession" class="custom-input" style="cursor: pointer;">
+                    <option value="Student">College Student / Fresher</option>
+                    <option value="Job Seeker">Job Seeker / Career Switcher</option>
+                    <option value="Working Professional">Working Professional / Marketer</option>
+                    <option value="Business Owner">Business Owner / Entrepreneur</option>
+                    <option value="Freelancer">Freelancer / Consultant</option>
+                    <option value="Content Creator">Content Creator / Influencer</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <button type="button" id="saveEditBtn" class="btn-save-details">
+                  <i class="ph-bold ph-check"></i> Save & Continue to Payment
+                </button>
+              </div>
+
+              <!-- 3. Order Breakdown Table -->
+              <div class="checkout-order-summary">
+                <div class="summary-header-label">PAYMENT BREAKDOWN</div>
+                <div class="summary-table-row">
+                  <span style="font-weight: 600;">₹49 AI-Integrated Digital Marketing Workshop</span>
+                  <span>1</span>
+                  <span style="font-weight: 700;">₹49.00</span>
+                </div>
+                <div style="font-size: 0.78rem; color: #64748b; margin-top: 5px; line-height: 1.4;">
+                  • 3 Hours Live Session on Zoom • November 5, 2026 @ 7:00 PM IST<br>
+                  • Official Certificate, Tax Invoice & VIP WhatsApp Group Access Included
+                </div>
+                <div class="summary-total-row">
+                  <span>Total Payable Amount</span>
+                  <span style="color: #059669; font-size: 1.25rem;">₹49.00</span>
+                </div>
+              </div>
+
+              <!-- 4. Complete Payment Button -->
+              <button type="button" id="completeOrderBtn" class="btn-complete-order">
+                <span class="btn-complete-main"><i class="ph-bold ph-lock-key"></i> Pay ₹49 & Confirm My Seat</span>
+                <span class="btn-complete-sub">Instant Zoom Meeting Access & Tax Invoice</span>
+              </button>
+
+              <p class="btn-security-sub">* 100% Secure & Encrypted 256-Bit SSL Payments *</p>
+            </div>
+          </div>
+
+          <!-- Secure Payments Graphic -->
+          <div class="payments-powered-box">
+            <div class="payment-icons-strip">
+              <img class="payment-icon-image" src="assets/images/payment_secure.png" alt="Payments Powered by Razorpay - UPI, Cards, NetBanking">
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Workshop Benefits & Cards -->
+        <div class="checkout-features-col">
+          <!-- Workshop Graphic Banner -->
+          <div class="workshop-graphic-card">
+            <div class="graphic-badge">
+              <i class="ph ph-sparkle"></i> 100% Practical Training
+            </div>
+            <h3 class="graphic-title">AI-Integrated Digital Marketing Masterclass</h3>
+            <p class="graphic-tagline">
+              Build Smarter, Automate Everything, and Lead the Digital Marketing Revolution with Practical AI
+              Integration.
+            </p>
+            <div class="graphic-tools-row">
+              <span class="graphic-tool-badge">Meta Ads</span>
+              <span class="graphic-tool-badge">Google Ads</span>
+              <span class="graphic-tool-badge">SEO</span>
+              <span class="graphic-tool-badge">ChatGPT</span>
+              <span class="graphic-tool-badge">Midjourney</span>
+              <span class="graphic-tool-badge">GA4</span>
+            </div>
+          </div>
+
+          <!-- 6 Feature Cards (Matching Screenshot) -->
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Master The Fundamentals Of Digital Marketing, Funnels & Lead Generation
+            </div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Create AI-Powered Workflows That Automate Real-World Tasks</div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Connect AI Agents With Your Favorite Tools, Apps, And Business Systems
+            </div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Design And Deploy AI Solutions For Real-World Business Use Cases</div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Gain Hands-On Experience Through 3+ Live Demos, 10+ Guided Exercises &
+              Real-World Projects</div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Master Modern Generative AI Tools And Prompt Engineering Techniques</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Dark Footer -->
+  <footer class="checkout-footer">
+    <div style="margin-bottom: 10px;">
+      <img src="assets/images/DCH.png" alt="Digital Crazy Hub" style="height: 36px; width: auto; object-fit: contain;">
+    </div>
+    <p style="margin: 0 0 6px;">
+      &copy; 2026 Digital Crazy Hub. All rights reserved. Registered under MSME, Government of India.
+    </p>
+    <p style="font-size: 0.76rem; color: #64748b; max-width: 800px; margin: 10px auto 0; line-height: 1.5;">
+      Disclaimer: This site is not a part of the Facebook website or Facebook Inc. Additionally, this site is NOT
+      endorsed by Facebook in any way. FACEBOOK is a trademark of FACEBOOK, Inc. All trademarks and registered
+      trademarks belong to their respective owners.
+    </p>
+  </footer>
+
+    <!-- Modular Scripts -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/form-validation.js"></script>
+  <script src="assets/js/payment.js"></script>
+</body>
+
+</html>

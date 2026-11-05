@@ -1,0 +1,208 @@
+MIME-Version: 1.0
+From: Digital Crazy Hub <info@digitalcrazyhub.com>
+Reply-To: info@digitalcrazyhub.com
+X-Mailer: DCH-MailEngine/3.0
+Content-Type: multipart/mixed; boundary="==DCH_Multipart_Boundary_8e1b7e4a1ba77d9f4be523801310ce79"
+
+--==DCH_Multipart_Boundary_8e1b7e4a1ba77d9f4be523801310ce79
+Content-Type: multipart/alternative; boundary="==DCH_Alt_Boundary_681404d1dddf16b336417c596e5c617d"
+
+--==DCH_Alt_Boundary_681404d1dddf16b336417c596e5c617d
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+
+Dear Ananya Sharma,
+
+Congratulations!
+Your enrollment for the Digital Marketing Training Workshop has been successfully confirmed.
+
+Enrollment Details:
+Enrollment ID: DCH-2026-701701
+Student Name: Ananya Sharma
+Email: ananya.unpaid@gmail.com
+Phone: 9123456780
+Location: Coimbatore
+Current Profile: Working Professional / Marketer
+
+Workshop Details:
+Workshop Date: November 5, 2026
+Workshop Time: 7:00 PM IST
+
+Payment Details:
+Payment ID: pay_valid_275367
+Amount Paid: ₹49.00
+Payment Status: PAID
+
+Your seat is officially confirmed.
+Please find your payment invoice attached to this email as a PDF.
+
+VIP WhatsApp Group Join Link:
+https://chat.whatsapp.com/digitalcrazyhub-dm-workshop
+
+Thank you for choosing Digital Crazy Hub.
+
+Regards,
+Digital Crazy Hub Team
+https://training.digitalcrazyhub.com
+
+--==DCH_Alt_Boundary_681404d1dddf16b336417c596e5c617d
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Your Enrollment is Confirmed – Digital Crazy Hub</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f8fafc; margin: 0; padding: 24px 0; color: #0f172a; }
+    .email-container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 12px rgba(15,23,42,0.06); }
+    .email-header { background: #0f172a; padding: 26px 30px; text-align: center; border-bottom: 3px solid #2563eb; }
+    .email-header h1 { color: #ffffff; margin: 0; font-size: 20px; font-weight: 800; letter-spacing: 0.04em; }
+    .email-body { padding: 32px 30px; }
+    .congrats-badge { display: inline-block; background: #ecfdf5; color: #059669; font-weight: 700; font-size: 13px; padding: 4px 12px; border-radius: 20px; border: 1px solid #a7f3d0; margin-bottom: 16px; text-transform: uppercase; }
+    .salutation { font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 10px; }
+    .details-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px 20px; margin: 24px 0; }
+    .details-row { display: flex; justify-content: space-between; padding: 7px 0; font-size: 14px; border-bottom: 1px dashed #e2e8f0; }
+    .details-row:last-child { border-bottom: none; }
+    .label { color: #64748b; font-weight: 500; }
+    .val { color: #0f172a; font-weight: 700; }
+    .whatsapp-btn { display: inline-block; background: #25d366; color: #ffffff !important; text-decoration: none; padding: 14px 28px; font-size: 15px; font-weight: 700; border-radius: 8px; text-align: center; margin: 20px 0; }
+    .attachment-notice { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #1e40af; margin-top: 20px; }
+    .email-footer { background: #0f172a; padding: 20px; text-align: center; font-size: 12px; color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="email-header">
+      <h1>DIGITAL CRAZY HUB</h1>
+    </div>
+    <div class="email-body">
+      <div class="congrats-badge">✔ Seat Confirmed</div>
+      <div class="salutation">Dear Ananya Sharma,</div>
+      <p style="font-size: 15px; line-height: 1.6; color: #334155; margin-top: 0;">
+        <strong>Congratulations!</strong> Your enrollment for the <strong>Digital Marketing Training Workshop</strong> has been successfully confirmed.
+      </p>
+
+      <div class="details-box">
+        <div style="font-size: 12px; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em;">Enrollment & Payment Details</div>
+        <div class="details-row"><span class="label">Enrollment ID:</span><span class="val">DCH-2026-701701</span></div>
+        <div class="details-row"><span class="label">Student Name:</span><span class="val">Ananya Sharma</span></div>
+        <div class="details-row"><span class="label">Email:</span><span class="val">ananya.unpaid@gmail.com</span></div>
+        <div class="details-row"><span class="label">Phone:</span><span class="val">9123456780</span></div>
+        <div class="details-row"><span class="label">Location:</span><span class="val">Coimbatore</span></div>
+        <div class="details-row"><span class="label">Current Profile:</span><span class="val">Working Professional / Marketer</span></div>
+        <div class="details-row"><span class="label">Workshop Date:</span><span class="val">November 5, 2026</span></div>
+        <div class="details-row"><span class="label">Workshop Time:</span><span class="val">7:00 PM IST</span></div>
+        <div class="details-row"><span class="label">Payment ID:</span><span class="val">pay_valid_275367</span></div>
+        <div class="details-row"><span class="label">Amount Paid:</span><span class="val" style="color: #059669;">₹49.00</span></div>
+        <div class="details-row"><span class="label">Payment Status:</span><span class="val" style="color: #059669;">PAID</span></div>
+      </div>
+
+      <p style="font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 6px;">Your seat is officially confirmed!</p>
+      <p style="font-size: 13px; color: #64748b; margin-top: 0; line-height: 1.5;">
+        The Zoom meeting join link, digital checklist, and workshop alerts are shared exclusively in our private VIP WhatsApp Community:
+      </p>
+
+      <a href="https://chat.whatsapp.com/digitalcrazyhub-dm-workshop" class="whatsapp-btn" target="_blank" rel="noopener">
+        👉 Join VIP WhatsApp Group Now
+      </a>
+
+      <div class="attachment-notice">
+        <strong>📎 Official Tax Invoice Attached:</strong> Your payment invoice and workshop admission pass PDF has been generated and attached to this email.
+      </div>
+    </div>
+    <div class="email-footer">
+      <p style="margin: 0 0 6px;">Digital Crazy Hub • Govt. of India MSME Registered</p>
+      <p style="margin: 0;">Support: <a href="mailto:info@digitalcrazyhub.com" style="color: #60a5fa;">info@digitalcrazyhub.com</a> | <a href="https://training.digitalcrazyhub.com" style="color: #60a5fa;">https://training.digitalcrazyhub.com</a></p>
+    </div>
+  </div>
+</body>
+</html>
+
+--==DCH_Alt_Boundary_681404d1dddf16b336417c596e5c617d--
+
+--==DCH_Multipart_Boundary_8e1b7e4a1ba77d9f4be523801310ce79
+Content-Type: application/pdf; name="INV-DCH-2026-701701.pdf"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="INV-DCH-2026-701701.pdf"
+
+JVBERi0xLjQKMSAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZyAvUGFnZXMgMiAwIFIgPj4KZW5kb2Jq
+CjIgMCBvYmoKPDwgL1R5cGUgL1BhZ2VzIC9LaWRzIFszIDAgUl0gL0NvdW50IDEgPj4KZW5kb2Jq
+CjMgMCBvYmoKPDwgL1R5cGUgL1BhZ2UgL1BhcmVudCAyIDAgUiAvTWVkaWFCb3ggWzAgMCA1OTUu
+MjggODQxLjg5XSAvQ29udGVudHMgNCAwIFIgL1Jlc291cmNlcyA8PCAvRm9udCA8PCAvRjEgNSAw
+IFIgL0YyIDYgMCBSID4+ID4+ID4+CmVuZG9iago0IDAgb2JqCjw8IC9MZW5ndGggMzYwMyA+Pgpz
+dHJlYW0KcQowLjA2IDAuMTEgMC4xOCByZwowIDcxMS44OSA1OTUuMjggMTMwIHJlIGYKMC4xNSAw
+LjM5IDAuOTIgcmcKMCA3MDcuODkgNTk1LjI4IDQgcmUgZgpCVAovRjEgMjIgVGYKMSAxIDEgcmcK
+NDAgNzg2Ljg5IFRkIChESUdJVEFMIENSQVpZIEhVQikgVGoKRVQKQlQKL0YyIDkgVGYKMC41OCAw
+LjY0IDAuNzIgcmcKNDAgNzY5Ljg5IFRkIChPRkZJQ0lBTCBUQVggSU5WT0lDRSAmIFdPUktTSE9Q
+IEFETUlTU0lPTiBQQVNTKSBUagpFVApCVAovRjEgOSBUZgowLjIgMC44MyAwLjYgcmcKNDAgNzUx
+Ljg5IFRkIChHT1ZUIE9GIElORElBIE1TTUUgUkVHSVNURVJFRCBUUkFJTklORyBQUk9WSURFUikg
+VGoKRVQKQlQKL0YxIDExIFRmCjEgMSAxIHJnCjM4MCA3ODYuODkgVGQgKElOVk9JQ0UgTk86IElO
+Vi1EQ0gtMjAyNi03MDE3MDEpIFRqCi9GMiA5IFRmCjAuOCAwLjg1IDAuOSByZwozODAgNzY5Ljg5
+IFRkIChEYXRlICYgVGltZTogMDUgTm92IDIwMjYsIDEyOjUzIFBNKSBUagozODAgNzU0Ljg5IFRk
+IChQYXltZW50IFJlZjogcGF5X3ZhbGlkXzI3NTM2NykgVGoKRVQKUQpxCjAuOTcgMC45OCAwLjk5
+IHJnCjAuODkgMC45MSAwLjk0IFJHCjEgdwo0MCA2MjEuODkgMjQ1IDcwIHJlIEIKQlQKL0YxIDEw
+IFRmCjAuMTUgMC4zOSAwLjkyIHJnCjUyIDY3My44OSBUZCAoQklMTEVEIFRPOikgVGoKL0YxIDEx
+IFRmCjAuMDYgMC4wOSAwLjE2IHJnCjUyIDY1OC44OSBUZCAoQW5hbnlhIFNoYXJtYSkgVGoKL0Yy
+IDkgVGYKMC4yOCAwLjMzIDAuNDEgcmcKNTIgNjQ0Ljg5IFRkIChFbWFpbDogYW5hbnlhLnVucGFp
+ZEBnbWFpbC5jb20pIFRqCjUyIDYzMS44OSBUZCAoUGhvbmU6IDkxMjM0NTY3ODAgfCBDb2ltYmF0
+b3JlKSBUagpFVApRCnEKMC45NyAwLjk4IDAuOTkgcmcKMC44OSAwLjkxIDAuOTQgUkcKMSB3CjMx
+MCA2MjEuODkgMjQ1IDcwIHJlIEIKQlQKL0YxIDEwIFRmCjAuMTUgMC4zOSAwLjkyIHJnCjMyMiA2
+NzMuODkgVGQgKFdPUktTSE9QIERFVEFJTFM6KSBUagovRjEgMTAgVGYKMC4wNiAwLjA5IDAuMTYg
+cmcKMzIyIDY1OC44OSBUZCAoU2NoZWR1bGU6IE5vdmVtYmVyIDUsIDIwMjYgfCA3OjAwIFBNIElT
+VCkgVGoKL0YyIDkgVGYKMC4yOCAwLjMzIDAuNDEgcmcKMzIyIDY0NC44OSBUZCAoRm9ybWF0OiBM
+aXZlIG9uIFpvb20gSW50ZXJhY3RpdmUpIFRqCjMyMiA2MzEuODkgVGQgKExhbmd1YWdlOiBUYW1p
+bCB8IER1cmF0aW9uOiAzIEhvdXJzKSBUagpFVApRCnEKMC4wNiAwLjA5IDAuMTYgcmcKNDAgNTc2
+Ljg5IDUxNSAyNiByZSBmCkJUCi9GMSA5IFRmCjEgMSAxIHJnCjUwIDU4NS44OSBUZCAoIykgVGoK
+NzUgNTg1Ljg5IFRkIChJVEVNIERFU0NSSVBUSU9OKSBUagozNTAgNTg1Ljg5IFRkIChRVFkpIFRq
+CjQxMCA1ODUuODkgVGQgKFJBVEUpIFRqCjQ4NSA1ODUuODkgVGQgKEFNT1VOVCkgVGoKRVQKUQpx
+CjAuODkgMC45MSAwLjk0IFJHCjAuNSB3CjQwIDUzOC44OSA1MTUgMzggcmUgUwpCVAovRjEgOSBU
+ZgowLjA2IDAuMDkgMC4xNiByZwo1MCA1NjAuODkgVGQgKDEpIFRqCjc1IDU2MC44OSBUZCAoTGl2
+ZSAzLUhvdXIgQUktSW50ZWdyYXRlZCBEaWdpdGFsIE1hcmtldGluZyBNYXN0ZXJjbGFzcykgVGoK
+L0YyIDggVGYKMC4zOSAwLjQ1IDAuNTUgcmcKNzUgNTQ3Ljg5IFRkIChJbmNsdWRlcyBMaXZlIEFk
+IFNldHVwLCA1MCsgVGVtcGxhdGVzLCBDZXJ0aWZpY2F0ZSAmIFdoYXRzQXBwIFZJUCBBY2Nlc3Mp
+IFRqCi9GMiA5IFRmCjAuMDYgMC4wOSAwLjE2IHJnCjM1NSA1NjAuODkgVGQgKDEpIFRqCjQxMCA1
+NjAuODkgVGQgKFJzLiA0MS41MykgVGoKNDg1IDU2MC44OSBUZCAoUnMuIDQxLjUzKSBUagpFVApR
+CnEKMC45NyAwLjk4IDAuOTkgcmcKMzMwIDQ1My44OSAyMjUgODAgcmUgZgowLjg5IDAuOTEgMC45
+NCBSRwowLjUgdwozMzAgNDUzLjg5IDIyNSA4MCByZSBTCkJUCi9GMiA5IFRmCjAuMzkgMC40NSAw
+LjU1IHJnCjM0MiA1MTUuODkgVGQgKFRheGFibGUgVmFsdWU6KSBUago0NzUgNTE1Ljg5IFRkIChS
+cy4gNDEuNTMpIFRqCjM0MiA0OTkuODkgVGQgKENHU1QgKDklKTopIFRqCjQ3NSA0OTkuODkgVGQg
+KFJzLiAzLjc0KSBUagozNDIgNDgzLjg5IFRkIChTR1NUICg5JSk6KSBUago0NzUgNDgzLjg5IFRk
+IChScy4gMy43MykgVGoKL0YxIDExIFRmCjAuMDYgMC4wOSAwLjE2IHJnCjM0MiA0NjMuODkgVGQg
+KFRvdGFsIFBhaWQgKElOUik6KSBUagowLjA2IDAuNTkgMC40MSByZwo0NzUgNDYzLjg5IFRkIChS
+cy4gNDkuMDApIFRqCkVUClEKcQowLjk0IDAuOTkgMC45NiByZwowLjIwIDAuODMgMC42MCBSRwox
+IHcKNDAgNDUzLjg5IDI2MCA4MCByZSBCCkJUCi9GMSAxMCBUZgowLjAyIDAuNDQgMC4yOSByZwo1
+NSA1MTEuODkgVGQgKFBBWU1FTlQgU1RBVFVTOiBQQUlEICYgVkVSSUZJRUQpIFRqCi9GMiA4IFRm
+CjAuMTMgMC4zMyAwLjI0IHJnCjU1IDQ5NS44OSBUZCAoQXV0aGVudGljYXRlZCBSYXpvcnBheSBH
+YXRld2F5IFRyYW5zYWN0aW9uKSBUago1NSA0ODEuODkgVGQgKFRyYW5zYWN0aW9uIElEOiBwYXlf
+dmFsaWRfMjc1MzY3KSBUago1NSA0NjcuODkgVGQgKFZhbGlkIEFkbWlzc2lvbiBQYXNzIGZvciBX
+b3Jrc2hvcCkgVGoKRVQKUQpxCjAuOTQgMC45OSAwLjk2IHJnCjAuMTMgMC43NyAwLjM3IFJHCjEu
+NSB3CjQwIDMyMy44OSA1MTUgMTE1IHJlIEIKQlQKL0YxIDEyIFRmCjAuMDggMC40NSAwLjIyIHJn
+CjU1IDQxNS44OSBUZCAoSU1QT1JUQU5UOiBKT0lOIFlPVVIgVklQIFdIQVRTQVBQIENPTU1VTklU
+WSkgVGoKL0YyIDkuNSBUZgowLjA4IDAuMzUgMC4xOCByZwo1NSAzOTUuODkgVGQgKDEuIFlvdXIg
+Wm9vbSBsaXZlIHRyYWluaW5nIGFjY2VzcyBsaW5rIHdpbGwgYmUgZGVsaXZlcmVkIGV4Y2x1c2l2
+ZWx5IGluc2lkZSB0aGlzIGdyb3VwLikgVGoKNTUgMzc5Ljg5IFRkICgyLiBUaGUgNTArIEhpZ2gt
+Q29udmVydGluZyBBZCBUZW1wbGF0ZXMgJiBBY3Rpb24gQ2hlY2tsaXN0IHdpbGwgYmUgc2hhcmVk
+IG9uIHNlc3Npb24gZGF5LikgVGoKNTUgMzYzLjg5IFRkICgzLiBLZWVwIHlvdXIgRW5yb2xsbWVu
+dCBJRCBbRENILTIwMjYtNzAxNzAxXSBoYW5keSBkdXJpbmcgbGl2ZSBzZXNzaW9uIGF0dGVuZGFu
+Y2UuKSBUagovRjEgOS41IFRmCjAuMDggMC40NSAwLjIyIHJnCjU1IDM0My44OSBUZCAoT2ZmaWNp
+YWwgQ29tbXVuaXR5IExpbms6IGh0dHBzOi8vdHJhaW5pbmcuZGlnaXRhbGNyYXp5aHViLmNvbS8p
+IFRqCkVUClEKcQowLjg5IDAuOTEgMC45NCBSRwowLjUgdwo0MCA3MCA1MTUgMC41IHJlIFMKQlQK
+L0YxIDggVGYKMC4zOSAwLjQ1IDAuNTUgcmcKNDAgNTQgVGQgKERJR0lUQUwgQ1JBWlkgSFVCIHwg
+d3d3LmRpZ2l0YWxjcmF6eWh1Yi5jb20gfCB0cmFpbmluZy5kaWdpdGFsY3JhenlodWIuY29tKSBU
+agovRjIgNy41IFRmCjQwIDQyIFRkIChHb3Z0LiBvZiBJbmRpYSBNaW5pc3RyeSBvZiBNU01FIFJl
+Z2lzdGVyZWQgRW50ZXJwcmlzZS4gQ29tcHV0ZXIgZ2VuZXJhdGVkIHRheCBpbnZvaWNlIC0gbm8g
+cGh5c2ljYWwgc2lnbmF0dXJlIHJlcXVpcmVkLikgVGoKNDAgMzAgVGQgKE5lZWQgYXNzaXN0YW5j
+ZT8gRW1haWw6IHN1cHBvcnRAZGlnaXRhbGNyYXp5aHViLmNvbSB8IFdoYXRzQXBwOiArOTEgOTA0
+NzcgMDAyMDEpIFRqCkVUClEKCmVuZHN0cmVhbQplbmRvYmoKNSAwIG9iago8PCAvVHlwZSAvRm9u
+dCAvU3VidHlwZSAvVHlwZTEgL0Jhc2VGb250IC9IZWx2ZXRpY2EtQm9sZCAvRW5jb2RpbmcgL1dp
+bkFuc2lFbmNvZGluZyA+PgplbmRvYmoKNiAwIG9iago8PCAvVHlwZSAvRm9udCAvU3VidHlwZSAv
+VHlwZTEgL0Jhc2VGb250IC9IZWx2ZXRpY2EgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcgPj4K
+ZW5kb2JqCnhyZWYKMCA3CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDAwOSAwMDAwMCBuIAow
+MDAwMDAwMDU4IDAwMDAwIG4gCjAwMDAwMDAxMTUgMDAwMDAgbiAKMDAwMDAwMDI1NyAwMDAwMCBu
+IAowMDAwMDAzOTEyIDAwMDAwIG4gCjAwMDAwMDQwMTQgMDAwMDAgbiAKdHJhaWxlcgo8PCAvU2l6
+ZSA3IC9Sb290IDEgMCBSID4+CnN0YXJ0eHJlZgo0MTExCiUlRU9G
+
+
+--==DCH_Multipart_Boundary_8e1b7e4a1ba77d9f4be523801310ce79--

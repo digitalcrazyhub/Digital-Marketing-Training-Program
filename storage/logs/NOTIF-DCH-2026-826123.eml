@@ -1,0 +1,70 @@
+MIME-Version: 1.0
+From: Digital Crazy Hub <info@digitalcrazyhub.com>
+Reply-To: info@digitalcrazyhub.com
+X-Mailer: DCH-MailEngine/3.0
+Content-Type: multipart/mixed; boundary="==DCH_Multipart_Boundary_030bf53995f79e02f5a97349e4fb51d8"
+
+--==DCH_Multipart_Boundary_030bf53995f79e02f5a97349e4fb51d8
+Content-Type: multipart/alternative; boundary="==DCH_Alt_Boundary_f950b769cf05f6bc410408170532edf8"
+
+--==DCH_Alt_Boundary_f950b769cf05f6bc410408170532edf8
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+
+New Paid Workshop Enrollment – Vikram Sethi
+
+Enrollment ID: DCH-2026-826123
+Student Name: Vikram Sethi
+Email: vikram.sethi@gmail.com
+Phone: 9876543210
+Location: Chennai
+Current Profile: College Student / Fresher
+Payment ID: pay_restruct_399617
+Workshop Date: November 5, 2026
+Workshop Time: 7:00 PM IST
+Amount Paid: ₹49.00
+Payment Status: PAID
+
+--==DCH_Alt_Boundary_f950b769cf05f6bc410408170532edf8
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>New Paid Workshop Enrollment – Vikram Sethi</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; padding: 20px; color: #0f172a; margin: 0; }
+    .box { max-width: 580px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; box-shadow: 0 4px 12px rgba(15,23,42,0.06); }
+    h2 { color: #166534; margin-top: 0; font-size: 18px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px; }
+    td { padding: 8px 10px; border-bottom: 1px solid #f1f5f9; }
+    td.label { color: #64748b; font-weight: 600; width: 40%; }
+    td.val { font-weight: 700; color: #0f172a; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>✔ New Paid Workshop Enrollment</h2>
+    <p style="color: #475569; font-size: 14px; line-height: 1.5;">A new student has successfully completed payment for the ₹49 Digital Marketing Workshop:</p>
+    <table>
+      <tr><td class="label">Enrollment ID:</td><td class="val">DCH-2026-826123</td></tr>
+      <tr><td class="label">Student Name:</td><td class="val">Vikram Sethi</td></tr>
+      <tr><td class="label">Email:</td><td class="val"><a href="mailto:vikram.sethi@gmail.com">vikram.sethi@gmail.com</a></td></tr>
+      <tr><td class="label">Phone:</td><td class="val"><a href="https://wa.me/9876543210">9876543210</a></td></tr>
+      <tr><td class="label">Location:</td><td class="val">Chennai</td></tr>
+      <tr><td class="label">Current Profile:</td><td class="val">College Student / Fresher</td></tr>
+      <tr><td class="label">Payment ID:</td><td class="val">pay_restruct_399617</td></tr>
+      <tr><td class="label">Workshop Date:</td><td class="val">November 5, 2026</td></tr>
+      <tr><td class="label">Workshop Time:</td><td class="val">7:00 PM IST</td></tr>
+      <tr><td class="label">Amount Paid:</td><td class="val" style="color: #166534;">₹49.00</td></tr>
+      <tr><td class="label">Payment Status:</td><td class="val" style="color: #166534;">PAID</td></tr>
+    </table>
+  </div>
+</body>
+</html>
+
+--==DCH_Alt_Boundary_f950b769cf05f6bc410408170532edf8--
+
+--==DCH_Multipart_Boundary_030bf53995f79e02f5a97349e4fb51d8--

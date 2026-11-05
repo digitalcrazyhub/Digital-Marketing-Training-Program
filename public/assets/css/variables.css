@@ -1,0 +1,45 @@
+/**
+ * Digital Crazy Hub - Global Design Tokens & Variables
+ * Preserves Brand Identity and Original CSS Root Color Palette
+ */
+
+:root {
+  /* Brand Core Colors (Preserved) */
+  --ink: #0f172a;
+  --ink-light: #1e293b;
+  --muted: #475569;
+  --muted-light: #64748b;
+  --blue: #2563eb;
+  --blue-dark: #1d4ed8;
+  --blue-deep: #1e3a8a;
+  --purple: #7c3aed;
+  --purple-dark: #6d28d9;
+  --surface: #ffffff;
+  --surface-alt: #f8fafc;
+  --page: #f1f5f9;
+  --border: #e2e8f0;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  /* Accent Gradients */
+  --gradient-cta: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  --gradient-blue: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  --gradient-dark: linear-gradient(180deg, #070c18 0%, #0f172a 100%);
+
+  /* Typography */
+  --font-main: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Spacing & Transitions */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.12);
+  --shadow-xl: 0 20px 40px rgba(15, 23, 42, 0.18);
+}
+
