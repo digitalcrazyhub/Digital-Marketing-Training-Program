@@ -33,7 +33,19 @@ class Response {
     }
 
     public static function streamFile(string $filePath, string $filename, string $contentType = 'application/pdf'): void {
-        if (!file_exists($filePath)) {
+        // Enforce safe filename
+        $safeFilename = basename($filename);
+        $safeFilename = (string)preg_replace('/[^A-Za-z0-9_.-]/', '_', $safeFilename);
+
+        // Enforce strict path traversal prevention
+        $realPath = realpath($filePath);
+        $storageRoot = defined('STORAGE_DIR') ? realpath(STORAGE_DIR) : realpath(dirname(__DIR__, 2) . '/backend/storage');
+
+        if ($realPath === false || $storageRoot === false || !str_starts_with($realPath, $storageRoot)) {
+            self::error('Access denied: Unauthorized file path.', 403);
+        }
+
+        if (!is_file($realPath) || !is_readable($realPath)) {
             self::error('Requested file not found.', 404);
         }
 
@@ -42,12 +54,12 @@ class Response {
         }
 
         header('Content-Type: ' . $contentType);
-        header('Content-Disposition: attachment; filename="' . addslashes($filename) . '"');
-        header('Content-Length: ' . filesize($filePath));
+        header('Content-Disposition: attachment; filename="' . $safeFilename . '"');
+        header('Content-Length: ' . filesize($realPath));
         header('Cache-Control: private, max-age=0, must-revalidate');
         header('Pragma: public');
 
-        readfile($filePath);
+        readfile($realPath);
         exit;
     }
 }

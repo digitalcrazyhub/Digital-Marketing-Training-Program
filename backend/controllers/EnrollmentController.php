@@ -106,16 +106,17 @@ class EnrollmentController {
      * GET /api/download-invoice.php?enrollment_id=...&token=...
      */
     public function downloadInvoice(string $identifier, string $token): void {
-        if (empty($identifier) || empty($token)) {
-            Response::error('Missing enrollment identifier or security token.', 400);
+        $safeId = (string)preg_replace('/[^A-Za-z0-9_-]/', '', basename($identifier));
+        if (empty($safeId) || empty($token)) {
+            Response::error('Missing or invalid enrollment identifier or security token.', 400);
         }
 
-        $record = EnrollmentService::getEnrollment($identifier);
+        $record = EnrollmentService::getEnrollment($safeId);
         if (!$record) {
             Response::error('Enrollment record not found.', 404);
         }
 
-        $status = strtoupper((string)($record['payment_status'] ?? ($record['status'] ?? 'NOT PAID')));
+        $status = strtoupper((string)($record['amount_paid_status'] ?? ($record['payment_status'] ?? ($record['status'] ?? 'NOT PAID'))));
         if ($status !== 'PAID') {
             Response::error('Access denied: Invoice is only available after verified payment.', 403);
         }
@@ -125,14 +126,14 @@ class EnrollmentController {
             Response::error('Invalid or expired download token.', 403);
         }
 
-        $enrollmentId = (string)($record['enrollment_id'] ?? $identifier);
+        $enrollmentId = (string)($record['enrollment_id'] ?? $safeId);
         $invoiceFile = InvoiceService::getInvoicePath($enrollmentId);
 
         if (!$invoiceFile || !file_exists($invoiceFile)) {
             $invoiceFile = InvoiceService::generate($record);
         }
 
-        if (!file_exists($invoiceFile)) {
+        if (!$invoiceFile || !file_exists($invoiceFile)) {
             Response::error('Unable to generate invoice file.', 500);
         }
 

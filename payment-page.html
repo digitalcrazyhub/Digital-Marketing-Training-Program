@@ -18,7 +18,7 @@
     rel="stylesheet">
 
   <!-- Phosphor Icons -->
-  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1" integrity="sha384-cPFV+/abYd3INVFHPmSKpBmcnH+Q+bTZW7dv/EiuShUNPkHyFmRF8PsL7Ibfvunk" crossorigin="anonymous"></script>
 
   <!-- Razorpay Checkout Script -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -130,21 +130,24 @@
               <!-- Instant Candidate Inputs (Pre-filled from Enrollment Form) -->
               <div class="checkout-inputs-stack">
                 <div class="checkout-field-row">
+                  <label for="fullNameInput" class="sr-only">Full Name</label>
                   <input type="text" id="fullNameInput" name="name" class="checkout-input"
-                    placeholder="Full Name..." required autocomplete="name">
+                    placeholder="Full Name..." required autocomplete="name" aria-label="Full Name">
                 </div>
 
                 <div class="checkout-field-row">
+                  <label for="emailInput" class="sr-only">Email Address</label>
                   <input type="email" id="emailInput" name="email" class="checkout-input"
-                    placeholder="Email Address..." required autocomplete="email">
+                    placeholder="Email Address..." required autocomplete="email" aria-label="Email Address">
                 </div>
 
                 <div class="checkout-field-row">
                   <div class="checkout-phone-input-wrap">
-                    <span class="phone-flag-icon">🇮🇳</span>
-                    <span class="phone-dropdown-arrow">▾</span>
+                    <label for="phoneInput" class="sr-only">WhatsApp Number</label>
+                    <span class="phone-flag-icon" aria-hidden="true">🇮🇳</span>
+                    <span class="phone-dropdown-arrow" aria-hidden="true">▾</span>
                     <input type="tel" id="phoneInput" name="phone" class="checkout-phone-input"
-                      placeholder="WhatsApp Number..." required autocomplete="tel" maxlength="15">
+                      placeholder="WhatsApp Number..." required autocomplete="tel" maxlength="15" aria-label="WhatsApp Number">
                   </div>
                 </div>
               </div>

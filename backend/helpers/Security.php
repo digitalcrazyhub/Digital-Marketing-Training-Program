@@ -49,7 +49,7 @@ class Security {
                 error_log("Enrollment ID sequence query failed: " . $e->getMessage());
             }
         }
-        $random = mt_rand(100000, 999999);
+        $random = random_int(100000, 999999);
         return sprintf('DCH-2026-%06d', $random);
     }
 

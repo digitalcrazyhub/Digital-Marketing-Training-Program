@@ -71,8 +71,8 @@ assertTest("Generated Enrollment ID format (DCH-2026-XXXXXX): {$generatedId}", $
 echo "\n4. Testing Initial Form Submission (UNPAID Seat)...\n";
 $testSubmission = [
     'name'            => 'Ravi Kumar',
-    'email'           => 'ravi.test.' . mt_rand(1000, 9999) . '@example.com',
-    'phone'           => '98765' . mt_rand(10000, 99999),
+    'email'           => 'ravi.test.' . random_int(1000, 9999) . '@example.com',
+    'phone'           => '98765' . random_int(10000, 99999),
     'location'        => 'Chennai, Tamil Nadu',
     'current_profile' => 'Working Professional',
     'recaptcha_token' => '' // Soft bypassed in test env

@@ -52,8 +52,20 @@ class InvoiceService {
     }
 
     public static function getInvoicePath(string $enrollmentId): ?string {
-        $path = STORAGE_DIR . "/invoices/INV-{$enrollmentId}.pdf";
-        return file_exists($path) ? $path : null;
+        $safeId = (string)preg_replace('/[^A-Za-z0-9_-]/', '', basename($enrollmentId));
+        if (empty($safeId)) {
+            return null;
+        }
+        $invoiceDir = realpath(STORAGE_DIR . '/invoices');
+        if ($invoiceDir === false) {
+            return null;
+        }
+        $candidate = $invoiceDir . DIRECTORY_SEPARATOR . "INV-{$safeId}.pdf";
+        $realPath = realpath($candidate);
+        if ($realPath !== false && str_starts_with($realPath, $invoiceDir . DIRECTORY_SEPARATOR) && is_file($realPath)) {
+            return $realPath;
+        }
+        return null;
     }
 }
 

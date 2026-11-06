@@ -606,7 +606,7 @@ class EnrollmentService {
 
         $tasks = self::readJsonSyncQueue();
         $tasks[] = [
-            'id'            => time() . '_' . mt_rand(100, 999),
+            'id'            => time() . '_' . random_int(100, 999),
             'enrollment_id' => $enrollmentId,
             'action'        => $action,
             'payload'       => $payload,
