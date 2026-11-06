@@ -327,17 +327,18 @@ class EnrollmentService {
     public static function saveNewEnrollment(array $data, string $enrollmentId): array {
         $token = Security::generateToken();
         $pdo = Database::getConnection();
+        $ip = Security::getClientIp();
 
         if ($pdo) {
             $stmt = $pdo->prepare("
                 INSERT INTO enrollments (
                     enrollment_id, name, email, phone, location, current_profile,
-                    workshop_date, workshop_time, amount_paid, payment_status,
-                    verification_token, created_at
+                    amount, amount_paid, payment_status, amount_paid_status,
+                    workshop_date, workshop_time, verification_token, ip_address, created_at
                 ) VALUES (
                     :eid, :name, :email, :phone, :location, :current_profile,
-                    :w_date, :w_time, 0.00, 'NOT PAID',
-                    :token, NOW()
+                    49.00, 0.00, 'UNPAID', 'UNPAID',
+                    :w_date, :w_time, :token, :ip, NOW()
                 )
             ");
             $stmt->execute([
@@ -349,7 +350,8 @@ class EnrollmentService {
                 ':current_profile' => $data['current_profile'],
                 ':w_date'          => $data['workshop_date'],
                 ':w_time'          => $data['workshop_time'],
-                ':token'           => $token
+                ':token'           => $token,
+                ':ip'              => $ip
             ]);
         } else {
             $records = self::readJsonFallback();
@@ -366,14 +368,19 @@ class EnrollmentService {
                 'profession'           => $data['current_profile'],
                 'workshop_date'        => $data['workshop_date'],
                 'workshop_time'        => $data['workshop_time'],
+                'amount'               => 49.00,
+                'amount_paid'          => 0.00,
                 'order_id'             => null,
                 'razorpay_order_id'    => null,
                 'payment_id'           => null,
                 'razorpay_payment_id'  => null,
-                'amount_paid'          => 0.00,
-                'payment_status'       => 'NOT PAID',
-                'status'               => 'NOT PAID',
+                'payment_status'       => 'UNPAID',
+                'amount_paid_status'   => 'UNPAID',
+                'status'               => 'UNPAID',
+                'invoice_number'       => null,
+                'invoice_url'          => null,
                 'verification_token'   => $token,
+                'ip_address'           => $ip,
                 'google_sheets_synced' => 0,
                 'google_sheets_row'    => null,
                 'created_at'           => date('Y-m-d H:i:s')
@@ -402,15 +409,21 @@ class EnrollmentService {
     public static function markAsPaid(string $enrollmentId, string $paymentId, string $signature, string $orderId, float $amountPaid = 49.00): ?array {
         $token = Security::generateToken();
         $now = date('Y-m-d H:i:s');
+        $invoiceNum = 'INV-' . $enrollmentId;
+        $invoiceUrl = 'backend/storage/invoices/' . $invoiceNum . '.pdf';
         $pdo = Database::getConnection();
 
         if ($pdo) {
             $stmt = $pdo->prepare("
                 UPDATE enrollments SET
                     payment_status     = 'PAID',
+                    amount_paid_status = 'PAID',
                     payment_id         = :pid,
                     order_id           = :oid,
+                    signature          = :sig,
                     amount_paid        = :amount_paid,
+                    invoice_number     = :inv_num,
+                    invoice_url        = :inv_url,
                     verification_token = :token,
                     paid_at            = :paid_at
                 WHERE enrollment_id = :eid
@@ -418,7 +431,10 @@ class EnrollmentService {
             $stmt->execute([
                 ':pid'         => $paymentId,
                 ':oid'         => $orderId,
+                ':sig'         => $signature,
                 ':amount_paid' => $amountPaid,
+                ':inv_num'     => $invoiceNum,
+                ':inv_url'     => $invoiceUrl,
                 ':token'       => $token,
                 ':paid_at'     => $now,
                 ':eid'         => $enrollmentId
@@ -429,6 +445,7 @@ class EnrollmentService {
                 return null;
             }
             $records[$enrollmentId]['payment_status'] = 'PAID';
+            $records[$enrollmentId]['amount_paid_status'] = 'PAID';
             $records[$enrollmentId]['status'] = 'PAID';
             $records[$enrollmentId]['payment_id'] = $paymentId;
             $records[$enrollmentId]['razorpay_payment_id'] = $paymentId;
@@ -436,6 +453,8 @@ class EnrollmentService {
             $records[$enrollmentId]['razorpay_order_id'] = $orderId;
             $records[$enrollmentId]['signature'] = $signature;
             $records[$enrollmentId]['amount_paid'] = $amountPaid;
+            $records[$enrollmentId]['invoice_number'] = $invoiceNum;
+            $records[$enrollmentId]['invoice_url'] = $invoiceUrl;
             $records[$enrollmentId]['verification_token'] = $token;
             $records[$enrollmentId]['paid_at'] = $now;
             self::writeJsonFallback($records);
@@ -469,15 +488,28 @@ class EnrollmentService {
                 $row['enrollment_uuid'] = $row['enrollment_id'];
                 $row['city'] = $row['location'];
                 $row['profession'] = $row['current_profile'];
-                $row['status'] = $row['payment_status'];
+                $status = $row['amount_paid_status'] ?? ($row['payment_status'] ?? 'UNPAID');
+                $row['amount_paid_status'] = $status;
+                $row['payment_status'] = $status;
+                $row['status'] = $status;
                 $row['razorpay_order_id'] = $row['order_id'];
                 $row['razorpay_payment_id'] = $row['payment_id'];
-                $row['amount'] = $row['amount_paid'];
+                $row['amount'] = $row['amount'] ?? 49.00;
+                $row['amount_paid'] = $row['amount_paid'] ?? 0.00;
+                $row['invoice_number'] = $row['invoice_number'] ?? ($status === 'PAID' ? 'INV-' . $row['enrollment_id'] : null);
+                $row['invoice_url'] = $row['invoice_url'] ?? ($status === 'PAID' ? 'backend/storage/invoices/INV-' . $row['enrollment_id'] . '.pdf' : null);
             }
             return $row ?: null;
         } else {
             $records = self::readJsonFallback();
-            return $records[$enrollmentId] ?? null;
+            $rec = $records[$enrollmentId] ?? null;
+            if ($rec) {
+                $status = $rec['amount_paid_status'] ?? ($rec['payment_status'] ?? 'UNPAID');
+                $rec['amount_paid_status'] = $status;
+                $rec['payment_status'] = $status;
+                $rec['status'] = $status;
+            }
+            return $rec;
         }
     }
 
@@ -491,13 +523,20 @@ class EnrollmentService {
                 $row['enrollment_uuid'] = $row['enrollment_id'];
                 $row['city'] = $row['location'];
                 $row['profession'] = $row['current_profile'];
-                $row['status'] = $row['payment_status'];
+                $status = $row['amount_paid_status'] ?? ($row['payment_status'] ?? 'UNPAID');
+                $row['amount_paid_status'] = $status;
+                $row['payment_status'] = $status;
+                $row['status'] = $status;
             }
             return $row ?: null;
         } else {
             $records = self::readJsonFallback();
             foreach ($records as $r) {
                 if (($r['order_id'] ?? '') === $orderId || ($r['razorpay_order_id'] ?? '') === $orderId) {
+                    $status = $r['amount_paid_status'] ?? ($r['payment_status'] ?? 'UNPAID');
+                    $r['amount_paid_status'] = $status;
+                    $r['payment_status'] = $status;
+                    $r['status'] = $status;
                     return $r;
                 }
             }

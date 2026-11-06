@@ -1,195 +1,326 @@
-# Digital Crazy Hub – Digital Marketing Training Program
+# Digital Crazy Hub – ₹49 Digital Marketing Training Program
+## Production Master Architecture & Integration Documentation
 
-Official production repository for the **Digital Crazy Hub ₹49 AI-Integrated Digital Marketing Training Workshop**.
-
-Production Domain: [https://training.digitalcrazyhub.com/](https://training.digitalcrazyhub.com/)
+**Production Domain:** [https://training.digitalcrazyhub.com/](https://training.digitalcrazyhub.com/)  
+**Core Technologies:** Core PHP, MySQL/MariaDB (PDO), Razorpay Payment Gateway, Google Sheets API v4 (Service Account OAuth2 JWT RS256), SMTP / PHPMailer, Dompdf / Native PDF 1.4 Generator, Vanilla JavaScript (ES6+), HTML5, CSS3.
 
 ---
 
-## 1. Professional Project Architecture
+## 1. Centralized Backend Directory Structure
 
-```
-digital-marketing-training-program/
+All backend logic is isolated inside the `/backend/` directory:
+
+```text
+training-digitalcrazyhub/
 │
-├── public/                               # Web Document Root
-│   ├── index.html                        # Main Landing Page (Zero large inline CSS/JS)
-│   ├── thank-you.html                    # Authenticated Confirmation & Pass Page
-│   ├── payment-page.html                 # Direct Checkout & Candidate Card Page
-│   ├── payment-failed.html               # Payment Incomplete / Retry Page
-│   ├── 404.html                          # Branded 404 Error Page
-│   ├── robots.txt                        # Production SEO Robots Directive
-│   ├── sitemap.xml                       # Production XML Sitemap (Subdomain root)
-│   ├── .htaccess                         # Apache Security Headers, HTTPS & Caching
-│   │
-│   ├── assets/                           # Public Static Assets
-│   │   ├── css/                          # Modular Component Stylesheets
-│   │   │   ├── variables.css             # Global Design Tokens & Brand Colors
-│   │   │   ├── reset.css                 # Base HTML5 Reset
-│   │   │   ├── global.css                # Global Typography, Containers & Buttons
-│   │   │   ├── header.css                # Sticky Header & Live Marquee Ticker
-│   │   │   ├── hero.css                  # Split 60% Video / 40% Content Hero
-│   │   │   ├── sections.css              # Workshop Cards, Curriculum, Gallery, FAQ
-│   │   │   ├── enrollment-form.css       # Universal Enrollment Modal Styles
-│   │   │   ├── thank-you.css             # Thank You Page & Pass Card Styles
-│   │   │   ├── payment.css               # Checkout & Candidate Summary Styles
-│   │   │   ├── footer.css                # Footer, Back-to-Top, Mobile Sticky Bar
-│   │   │   ├── responsive.css            # Media Queries (1200px down to 360px)
-│   │   │   └── animations.css            # Keyframe Animations & Glow Effects
-│   │   │
-│   │   ├── js/                           # Pure Vanilla JavaScript Modules
-│   │   │   ├── config.js                 # Central Client-Side App Configuration
-│   │   │   ├── recaptcha.js              # Google reCAPTCHA v3 Execution Helper
-│   │   │   ├── form-validation.js        # Indian Mobile & Field Validation
-│   │   │   ├── enrollment-form.js        # Modal Controller & Server-Side Submission
-│   │   │   ├── countdown.js              # Real-Time Countdown to Workshop Date
-│   │   │   ├── gallery.js                # 42-Image Infinite Marquee & Lightbox
-│   │   │   ├── testimonials.js           # Video Testimonials & YouTube Facade
-│   │   │   ├── faq.js                    # Accessible FAQ Accordion Controller
-│   │   │   ├── navigation.js             # Mobile Sticky Bar & Smooth Scroll
-│   │   │   ├── payment.js                # Razorpay Checkout & Verification Runner
-│   │   │   ├── thank-you.js              # Authenticated Enrollment Verification
-│   │   │   └── main.js                   # Application Boot Coordinator
-│   │   │
-│   │   ├── images/                       # Brand Logos, MSME & Training Galleries
-│   │   │   ├── DCH.png                   # Official Digital Crazy Hub Logo
-│   │   │   ├── msme.png                  # Govt. of India MSME Badge
-│   │   │   ├── payment_secure.png        # Payment Security & Trust Seals
-│   │   │   └── Training/                 # 42 Verified Training Session Photos
-│   │   │
-│   │   └── video/                        # Video Assets
-│   │       └── banner-video.mp4          # Autoplay Looping Banner Video
-│   │
-│   └── api/                              # Thin Public API Entry Points
-│       ├── create-enrollment.php         # POST: Register Lead (MySQL + Google Sheets)
-│       ├── create-order.php              # POST: Create Razorpay Order
-│   ├── api/                              # Thin Entry Gateways Forwarding to /backend/router.php
-│   │   ├── index.php                     # Central API Gateway
-│   │   ├── create-enrollment.php         # POST: Initiate Enrollment & Order
-│   │   ├── create-order.php              # POST: Server-side Order Creation
-│   │   ├── verify-payment.php            # POST: Verify Signature, Captures & Notifies
-│   │   ├── verify-status.php             # GET: Authorize Thank You Page View
-│   │   ├── webhook.php                   # POST: Asynchronous Webhook Capture
-│   │   └── download-invoice.php          # GET: Stream Tax Invoice PDF
-│   │
-│   ├── assets/                           # Frontend Assets (CSS, JS, Images, Video)
-│   ├── .htaccess                         # Public Rewrite & Browser Caching Rules
-│   ├── robots.txt                        # Crawler Directives & Sitemap Reference
-│   └── sitemap.xml                       # Production Sitemap
+├── assets/
+│   ├── css/
+│   ├── js/
+│   ├── images/
+│   └── video/
 │
-├── backend/                              # Centralized Backend Architecture (Private)
-│   ├── bootstrap.php                     # PSR-4 Autoloader & Environment (.env) Loader
-│   ├── router.php                        # Central API Request Dispatcher
-│   ├── .htaccess                         # Direct HTTP Access Denied
+├── backend/
+│   ├── api/
+│   │   ├── submit-enrollment.php      # Form submission, validation, UNPAID DB row, Sheet append, RZP order
+│   │   ├── create-enrollment.php      # Backward-compatible alias for submit-enrollment
+│   │   ├── create-order.php           # Razorpay order generation (₹49 / 4900 paise)
+│   │   ├── verify-payment.php         # Signature verification, PAID DB update, Sheet sync, Invoice, Emails
+│   │   ├── payment-status.php         # Server-side verification for Thank-You page
+│   │   ├── verify-status.php          # Backward-compatible alias for payment-status
+│   │   ├── download-invoice.php       # Secure PDF download streaming endpoint
+│   │   ├── webhook.php                # Razorpay webhook listener (payment.captured, order.paid)
+│   │   └── .htaccess                  # Grants API execution, prevents indexing
 │   │
-│   ├── config/                           # Centralized Configuration
-│   │   ├── app.php                       # Application & Workshop Settings
-│   │   ├── database.php                  # PDO Connection & Resilient Fallback
-│   │   ├── payment.php                   # Razorpay Credentials & Secrets
-│   │   ├── email.php                     # Hostinger SMTP & Notification Settings
-│   │   └── google-sheets.php             # Google Sheets API V4 & Formatting
+│   ├── config/
+│   │   ├── app.php                    # Workshop schedule, dates, pricing, reCAPTCHA settings
+│   │   ├── config.php                 # Unified configuration entry point
+│   │   ├── config.sample.php          # PHP array configuration sample
+│   │   ├── database.php               # PDO database connection manager & fallback
+│   │   ├── google-sheets.php          # Google Sheets 10-column schema & colors
+│   │   ├── razorpay.php               # Razorpay credentials and webhook secret
+│   │   ├── payment.php                # Payment config alias
+│   │   ├── mail.php                   # SMTP configuration
+│   │   ├── email.php                  # Email config alias
+│   │   └── .htaccess                  # Strict deny from all
 │   │
-│   ├── controllers/                      # Request Handlers
-│   │   ├── EnrollmentController.php      # Enrollment, Status & Invoice Actions
-│   │   ├── PaymentController.php         # Order Creation & Verification Actions
-│   │   └── WebhookController.php         # Idempotent Razorpay Webhook Action
+│   ├── services/
+│   │   ├── EnrollmentService.php      # Complete lifecycle coordinator & state transitions
+│   │   ├── PaymentService.php         # Razorpay checkout & HMAC-SHA256 signature verifier
+│   │   ├── RazorpayService.php        # Core Razorpay API service
+│   │   ├── GoogleSheetsService.php    # Pure PHP RS256 OAuth2 Google Sheets API v4 client
+│   │   ├── InvoiceService.php         # Tax Invoice generator (strict PAID-only guard)
+│   │   ├── EmailService.php           # SMTP delivery with multipart PDF attachment
+│   │   ├── CaptchaService.php         # Google reCAPTCHA v3 verification
+│   │   └── RecaptchaService.php       # Core reCAPTCHA handler
 │   │
-│   ├── services/                         # Core Business Logic Services
-│   │   ├── EnrollmentService.php         # Master Orchestrator & Storage Engine
-│   │   ├── RazorpayService.php           # Order Client & HMAC-SHA256 Signatures
-│   │   ├── GoogleSheetsService.php       # Pure PHP RS256 JWT Google Sheets API v4
-│   │   ├── EmailService.php              # Dual Email Dispatcher & Direct Socket SMTP
-│   │   ├── InvoiceService.php            # Secured Paid-Only Tax Invoice Generator
-│   │   └── RecaptchaService.php          # Google reCAPTCHA v3 Token Verifier
+│   ├── controllers/
+│   │   ├── EnrollmentController.php   # Handles enrollment & status endpoints
+│   │   ├── PaymentController.php      # Handles order & verification endpoints
+│   │   └── WebhookController.php      # Handles webhook processing
 │   │
-│   ├── helpers/                          # Reusable Utilities
-│   │   ├── Security.php                  # Sanitization, Tokens, Rate Limiting
-│   │   ├── Validator.php                 # Strict Input Validation Rules
-│   │   └── Response.php                  # Standardized JSON & File Stream Output
+│   ├── database/
+│   │   ├── migrations/
+│   │   │   └── 001_create_enrollments_table.sql
+│   │   └── schema/
+│   │       └── database.sql           # Complete MySQL production schema
 │   │
-│   ├── middleware/                       # Security & Request Middleware
-│   │   └── SecurityMiddleware.php        # CORS, Headers, Rate Limiting
+│   ├── helpers/
+│   │   ├── Response.php               # JSON and file streaming helpers
+│   │   ├── Security.php               # Input sanitizer, Indian phone cleaner, ID generator
+│   │   └── Validator.php              # Server-side validation rules
 │   │
-│   ├── database/                         # Backend Database Schemas & Migrations
-│   │   ├── migrations/                   # Incremental Migration Scripts
-│   │   └── schema/                       # Canonical Schema Files
+│   ├── middleware/
+│   │   └── SecurityMiddleware.php     # CORS, security headers, rate limiting
 │   │
-│   ├── templates/                        # View Templates
-│   │   ├── emails/                       # HTML & Plain Text Email Templates
-│   │   │   ├── student-confirmation.php  # Student Confirmation with Attached PDF
-│   │   │   └── company-notification.php  # Internal Company Lead Alert
-│   │   └── invoices/
-│   │       └── invoice-template.php      # Pure PHP PDF 1.4 Invoice Generator
+│   ├── storage/
+│   │   ├── invoices/                  # Generated PDF Tax Invoices (INV-DCH-2026-XXXXXX.pdf)
+│   │   ├── logs/                      # Audit logs, payment logs, and .eml archives
+│   │   ├── queue/                     # Offline sync queue for resilient fallbacks
+│   │   └── .htaccess                  # Strict access denial
 │   │
-│   ├── storage/                          # Private Application Storage
-│   │   ├── .htaccess                     # Direct HTTP Access Denied
-│   │   ├── invoices/                     # Generated Tax Invoice PDFs (INV-*.pdf)
-│   │   ├── logs/                         # Audit Logs, Sync Logs, Email Logs
-│   │   ├── cache/                        # Application Cache
-│   │   ├── queue/                        # Resilient Offline Sync Queue Files
-│   │   └── private/                      # Private Service Account Certificates
+│   ├── templates/
+│   │   ├── invoices/
+│   │   │   └── invoice-template.php   # PDF 1.4 A4 Tax Invoice template with MSME badge
+│   │   ├── emails/
+│   │   │   ├── student-confirmation.php # Customer confirmation email with PDF attached
+│   │   │   └── company-notification.php # Company lead notification to info@digitalcrazyhub.com
+│   │   ├── invoice-template.php       # Direct template alias
+│   │   ├── payment-success-email.php  # Direct template alias
+│   │   └── lead-notification-email.php# Direct template alias
 │   │
-│   └── console/                          # CLI Commands & Background Jobs
-│       └── sync-google-sheets.php        # Offline Sync Queue Retry Runner
+│   ├── private/
+│   │   └── .htaccess                  # Secure private directory
+│   │
+│   ├── tests/
+│   │   ├── verify_flow.php            # 30-assertion automated test suite
+│   │   └── test_endpoints_syntax.php  # PHP syntax linter for all API endpoints
+│   │
+│   ├── .htaccess                      # Root backend security wrapper
+│   ├── bootstrap.php                  # PSR-4 autoloader, environment parser, class map
+│   └── router.php                     # Centralized API dispatcher
 │
-├── database/                             # Database Schemas & Migrations
-│   ├── .htaccess                         # Direct HTTP Access Denied
-│   ├── database.sql                      # Complete MySQL InnoDB Production Schema
-│   └── migrations/                       # Incremental Migration Scripts
-│
-├── tests/                                # Automated Test Suites
-│   └── test_suite.php                    # 10 Core Scenarios (30/30 Pass)
-│
-├── .env.example                          # Environment Variables Template
-├── .gitignore                            # Git Exclusion Rules
-├── composer.json                         # Project Manifest & Autoloading
-└── README.md                             # Documentation
+├── index.html                         # Landing page with enrollment modal
+├── payment-page.html                  # Razorpay checkout page with lightbox preview
+├── thank-you.html                     # Authenticated confirmation & invoice download page
+├── payment-failed.html                # Payment error & retry page
+├── 404.html                           # Custom 404 error page
+├── .htaccess                          # Web server rewrite rules & security headers
+├── .env.example                       # Environment configuration template
+└── README.md
 ```
 
 ---
 
-## 2. Environment Configuration (`.env`)
+## 2. Environment Setup (`.env`)
 
-Copy `.env.example` to `.env` and fill in your credentials:
+1. Copy `.env.example` to `.env` in the project root:
+   ```bash
+   cp .env.example .env
+   ```
+2. Populate the required credentials:
+   ```ini
+   APP_ENV=production
+   APP_DEBUG=false
+   APP_URL=https://training.digitalcrazyhub.com
+
+   # Workshop Details
+   WORKSHOP_TITLE="₹49 AI-Integrated Digital Marketing Paid Workshop"
+   WORKSHOP_DATE="November 24, 2026"
+   WORKSHOP_DAY="Tuesday"
+   WORKSHOP_TIME="7:00 PM IST"
+   WORKSHOP_PRICE=49.00
+   WORKSHOP_AMOUNT_PAISE=4900
+
+   # MySQL Database
+   DB_HOST=localhost
+   DB_PORT=3306
+   DB_NAME=dch_workshop
+   DB_USER=your_db_username
+   DB_PASS=your_db_password
+
+   # Razorpay API
+   RAZORPAY_KEY_ID=rzp_live_xxxxxxxxxxxxxx
+   RAZORPAY_KEY_SECRET=your_razorpay_secret
+   RAZORPAY_WEBHOOK_SECRET=your_webhook_secret
+
+   # Google Sheets API Service Account (OAuth2 JWT)
+   GOOGLE_SHEETS_SPREADSHEET_ID=1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+   GOOGLE_SHEETS_SHEET_NAME=Enrollments
+   GOOGLE_SERVICE_ACCOUNT_EMAIL=dch-sheets@your-project.iam.gserviceaccount.com
+   GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC...\n-----END PRIVATE KEY-----\n"
+
+   # SMTP Email
+   SMTP_HOST=smtp.hostinger.com
+   SMTP_PORT=465
+   SMTP_SECURE=ssl
+   SMTP_USER=info@digitalcrazyhub.com
+   SMTP_PASS=your_email_password
+   COMPANY_NOTIFICATION_EMAIL=info@digitalcrazyhub.com
+
+   # Google reCAPTCHA v3
+   RECAPTCHA_SITE_KEY=your_site_key
+   RECAPTCHA_SECRET_KEY=your_secret_key
+   ```
+
+---
+
+## 3. MySQL Database Setup
+
+1. Open phpMyAdmin or your MySQL CLI client on Hostinger / cPanel / localhost.
+2. Create the database:
+   ```sql
+   CREATE DATABASE IF NOT EXISTS `dch_workshop` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   USE `dch_workshop`;
+   ```
+3. Import the production schema from:
+   `backend/database/schema/database.sql`
+4. The schema creates:
+   - `enrollments`: Primary enrollment table with unique indexed `enrollment_id` (`DCH-2026-XXXXXX`), `amount_paid_status ENUM('UNPAID', 'PAID') DEFAULT 'UNPAID'`, `payment_id`, `invoice_number`, `invoice_url`, `workshop_date`, `workshop_time`.
+   - `payment_logs`: Audit trail for checkout events, webhook payloads, IP addresses, and user agents.
+   - `sync_queue`: Background queue for resilient Google Sheets synchronization retries.
+
+---
+
+## 4. Google Sheets API v4 Setup
+
+The backend utilizes **pure PHP RS256 signed JWTs** via OpenSSL. No heavy Composer packages are required.
+
+### 4.1. Google Cloud Console Configuration
+1. Open the [Google Cloud Console](https://console.cloud.google.com/).
+2. Create a project named **Digital Crazy Hub**.
+3. Enable the **Google Sheets API** under **APIs & Services > Library**.
+4. Go to **APIs & Services > Credentials**, click **Create Credentials > Service Account**.
+5. Give the Service Account a name (e.g., `dch-sheets-sync`) and click **Create**.
+6. Open the newly created Service Account, navigate to the **Keys** tab, click **Add Key > Create new key > JSON**, and download the key file.
+7. Open the JSON file:
+   - Copy `client_email` to `GOOGLE_SERVICE_ACCOUNT_EMAIL` in `.env`.
+   - Copy `private_key` to `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY` in `.env`.
+
+### 4.2. Google Sheet Preparation
+1. Create a new Google Sheet and rename the active tab to `Enrollments`.
+2. Copy the Spreadsheet ID from the URL (`https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/edit`) to `GOOGLE_SHEETS_SPREADSHEET_ID` in `.env`.
+3. Click the **Share** button on the Google Sheet and add the Service Account email (`client_email`) with the **Editor** role.
+
+### 4.3. Exact 10-Column Architecture (Columns A through J)
+The backend automatically initializes and maintains the following exact 10 columns:
+
+| Column | Name | Description | Form Submit Value | Payment Success Value |
+| :---: | :--- | :--- | :--- | :--- |
+| **A** | `Enrollment ID` | Unique ID (`DCH-2026-XXXXXX`) | Generated format | Unchanged |
+| **B** | `Name` | Full Name | User input | Unchanged |
+| **C** | `Email` | Email Address | User input | Unchanged |
+| **D** | `Phone Number` | 10-digit Indian Mobile | 10 digits | Unchanged |
+| **E** | `Location` | City / State | User input | Unchanged |
+| **F** | `Current Profile` | Profession | User input | Unchanged |
+| **G** | `Payment ID` | Razorpay Payment ID | *Blank* (`""`) | `pay_xxxxxxxxxxxxxx` |
+| **H** | `Workshop Date` | Workshop Date | `November 24, 2026` | Unchanged |
+| **I** | `Workshop Time` | Workshop Time | `7:00 PM IST` | Unchanged |
+| **J** | `Amount Paid Status` | Payment Status | `UNPAID` | `PAID` |
+
+### 4.4. Conditional Formatting Rules
+The backend auto-applies Google Sheets conditional formatting on **Column J**:
+- **`PAID`**: Light Green background (`#D4EDDA`), Dark Green text (`#155724`), Bold.
+- **`UNPAID`**: Light Red background (`#F8D7DA`), Dark Red text (`#721C24`), Bold.
+
+---
+
+## 5. Razorpay Payment Gateway & Webhook Setup
+
+### 5.1. API Credentials
+1. Log in to the [Razorpay Dashboard](https://dashboard.razorpay.com/).
+2. Navigate to **Settings > API Keys**.
+3. Generate your Key ID and Key Secret. Add them to `.env`.
+
+### 5.2. Webhook Setup
+1. In the Razorpay Dashboard, navigate to **Settings > Webhooks > Add New Webhook**.
+2. **Webhook URL:** `https://training.digitalcrazyhub.com/api/webhook.php`
+3. **Secret:** Choose a strong secret string and add it to `RAZORPAY_WEBHOOK_SECRET` in `.env`.
+4. **Active Events:**
+   - `payment.captured`
+   - `order.paid`
+   - `payment.failed`
+5. Click **Create Webhook**.
+
+### 5.3. Idempotency & Signature Verification
+- Inbound webhooks are validated with `hash_hmac('sha256', $payload, $webhookSecret)`.
+- If an enrollment is already marked `PAID`, duplicate webhook events are logged and ignored without reprocessing.
+- If an enrollment is `UNPAID`, the webhook transitions the status to `PAID`, updates Google Sheets, generates the invoice PDF, and dispatches confirmation emails.
+
+---
+
+## 6. Automated Invoice PDF & Dual Email System
+
+### 6.1. Strict Unpaid Guard
+**Strict Business Rule:** Invoices and emails **MUST NEVER** trigger for unpaid enrollments. They trigger strictly after successful Razorpay payment verification or webhook capture.
+
+### 6.2. Tax Invoice PDF Generation
+- Saved to: `/backend/storage/invoices/INV-DCH-2026-XXXXXX.pdf`
+- Includes: Digital Crazy Hub logo & branding, MSME & Govt of India registration badge, Invoice Number, Payment ID, Order ID, Student Details, Course Name, Workshop Date (`November 24, 2026 @ 7:00 PM IST`), Amount Paid (`₹49.00`), and authorized signature badge.
+
+### 6.3. Dual Email Notifications (SMTP)
+1. **Email 1: Student Confirmation Email**
+   - Recipient: Student's submitted email.
+   - Subject: `Enrollment Confirmed – Digital Marketing Training Program | Digital Crazy Hub`
+   - Content: Congratulatory message, workshop date & time, Zoom platform instructions, VIP WhatsApp Community link, and the generated PDF Invoice attached.
+2. **Email 2: Company Lead & Payment Notification**
+   - Recipient: `info@digitalcrazyhub.com`
+   - Subject: `New Paid Enrollment – [Student Name] – DCH-2026-XXXXXX`
+   - Content: Complete student lead breakdown, Order ID, Payment ID, amount paid (₹49), and timestamp.
+
+---
+
+## 7. Thank-You Page Security Verification
+
+The Thank-You page (`thank-you.html`) performs authenticated server-side verification:
+1. URL includes: `thank-you.html?enrollment_id=DCH-2026-XXXXXX&token=xxxxxxxxxxxxxxxx`
+2. Frontend queries: `/api/payment-status.php?enrollment_id=...&token=...`
+3. Backend validates that `token` matches `verification_token` and `amount_paid_status === 'PAID'`.
+4. If verified, the green confirmation badge, dynamic student details, VIP WhatsApp button, and **Download Invoice (PDF)** button are displayed.
+5. If unverified or unpaid, access is denied with a security warning.
+
+---
+
+## 8. Verification & Test Suite
+
+Run the comprehensive 30-assertion test suite from the terminal:
 
 ```bash
-cp .env.example .env
+php backend/tests/verify_flow.php
 ```
 
-Key variables:
-- `APP_URL=https://training.digitalcrazyhub.com`
-- `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`
-- `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`
-- `GOOGLE_SHEETS_SPREADSHEET_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY`
-- `SMTP_HOST=smtp.hostinger.com`, `SMTP_PORT=465`, `SMTP_USER`, `SMTP_PASS`
-- `RECAPTCHA_SITE_KEY`, `RECAPTCHA_SECRET_KEY`
-- `CRON_SECRET=your_secret_key`
+All 30 assertions test:
+1. `AppConfig` and class maps load properly.
+2. Workshop price (₹49 / 4900 paise) and date (`November 24, 2026`).
+3. Google Sheets 10-column spec (`A` to `J`, Column J = `Amount Paid Status`).
+4. Phone sanitization (10-digit Indian numbers `[6-9]\d{9}`).
+5. Unique Enrollment ID format (`DCH-2026-XXXXXX`).
+6. Initial form submission (`amount_paid_status = 'UNPAID'`, `payment_id = NULL`).
+7. **Strict Rule Guard:** Unpaid enrollment throws an exception if invoice generation is attempted.
+8. Payment signature verification via HMAC-SHA256 and status transition to `PAID`.
+9. Automated PDF generation on disk (> 500 bytes).
+10. Idempotency test (duplicate payment attempt safely returns `already_processed`).
+11. Webhook processing and HMAC verification.
+12. Google Sheets exact 10-column data mapping.
 
 ---
 
-## 3. Hostinger Deployment Instructions
+## 9. Web Server & Deployment (.htaccess)
 
-1. **Document Root**:
-   - In Hostinger hPanel, set the subdomain document root of `training.digitalcrazyhub.com` to `/public_html/public` (or `/domains/training.digitalcrazyhub.com/public_html/public`).
-   - If your host points directly to the repository root, the included root `.htaccess` and `index.php` will automatically rewrite and serve from `public/` securely without exposing `backend/`, `database/`, or `.env`.
-2. **Database Setup**:
-   - Create a MySQL database in hPanel.
-   - Import `database/database.sql` via phpMyAdmin.
-3. **Set Permissions**:
-   - Ensure `backend/storage/invoices/`, `backend/storage/logs/`, and `backend/storage/queue/` have write permissions (`755` or `775`).
-4. **Setup Cron Job**:
-   - In hPanel, create a recurring cron job every 10 minutes:
-     ```bash
-     php /home/username/public_html/backend/console/sync-google-sheets.php
-     ```
+The root `.htaccess` routes requests directly to `/backend/api/` while preventing public access to backend internals:
 
----
+```apache
+# API Routing
+RewriteRule ^api/submit-enrollment(?:\.php)?$ backend/api/submit-enrollment.php [QSA,L]
+RewriteRule ^api/create-enrollment(?:\.php)?$ backend/api/submit-enrollment.php [QSA,L]
+RewriteRule ^api/create-order(?:\.php)?$ backend/api/create-order.php [QSA,L]
+RewriteRule ^api/verify-payment(?:\.php)?$ backend/api/verify-payment.php [QSA,L]
+RewriteRule ^api/payment-status(?:\.php)?$ backend/api/payment-status.php [QSA,L]
+RewriteRule ^api/verify-status(?:\.php)?$ backend/api/payment-status.php [QSA,L]
+RewriteRule ^api/download-invoice(?:\.php)?$ backend/api/download-invoice.php [QSA,L]
+RewriteRule ^api/webhook(?:\.php)?$ backend/api/webhook.php [QSA,L]
+RewriteRule ^api/(.*)$ backend/api/$1 [QSA,L]
 
-## 4. Testing
-
-Run the automated test suite verifying all 10 core scenarios:
-
-```bash
-php tests/test_suite.php
+# Block direct browser access to sensitive backend directories
+RewriteRule ^backend/(config|database|helpers|middleware|services|storage|templates|private)/ - [F,L]
+RewriteRule ^backend/(\.env.*|composer.*|package.*|README.*|phpunit.*) - [F,L]
 ```
-
-All 30 tests verify complete enrollment, MySQL status updates, Google Sheets sync, HMAC signature verification, PDF invoice generation, dual emails, and Thank You verification.

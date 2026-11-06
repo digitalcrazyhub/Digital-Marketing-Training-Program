@@ -1,14 +1,58 @@
+# ===================================================================
+# Digital Crazy Hub - Production Web Server Configuration
+# ===================================================================
+
+Options -Indexes
+ServerSignature Off
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Prevent access to sensitive dot files and directories
-    RewriteRule ^(\.env|\.git|\.htaccess) - [F,L]
+    # Enforce HTTPS on production
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP_HOST} ^training\.digitalcrazyhub\.com$ [NC]
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # Block access to private directories if document root is repository root
-    RewriteRule ^(backend|app|storage|database)/ - [F,L]
+    # Block access to hidden files (.env, .git, etc.)
+    RewriteRule ^\. - [F,L]
 
-    # Rewrite all public traffic to /public/ directory if document root is repo root
-    RewriteCond %{REQUEST_URI} !^/public/
-    RewriteRule ^(.*)$ public/$1 [L]
+    # Block direct browser access to backend internal directories
+    RewriteRule ^backend/(config|database|helpers|middleware|services|storage|templates|private)/ - [F,L]
+    RewriteRule ^backend/(\.env.*|composer.*|package.*|README.*|phpunit.*) - [F,L]
+
+    # API Routing to Centralized /backend/api/
+    RewriteRule ^api/submit-enrollment(?:\.php)?$ backend/api/submit-enrollment.php [QSA,L]
+    RewriteRule ^api/create-enrollment(?:\.php)?$ backend/api/submit-enrollment.php [QSA,L]
+    RewriteRule ^api/create-order(?:\.php)?$ backend/api/create-order.php [QSA,L]
+    RewriteRule ^api/verify-payment(?:\.php)?$ backend/api/verify-payment.php [QSA,L]
+    RewriteRule ^api/payment-status(?:\.php)?$ backend/api/payment-status.php [QSA,L]
+    RewriteRule ^api/verify-status(?:\.php)?$ backend/api/payment-status.php [QSA,L]
+    RewriteRule ^api/download-invoice(?:\.php)?$ backend/api/download-invoice.php [QSA,L]
+    RewriteRule ^api/webhook(?:\.php)?$ backend/api/webhook.php [QSA,L]
+    RewriteRule ^api/(.*)$ backend/api/$1 [QSA,L]
 </IfModule>
 
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Static Asset Caching
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType video/mp4 "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# Custom Error Pages
+ErrorDocument 404 /404.html

@@ -23,7 +23,7 @@ $amountPaid   = '₹' . number_format((float)($enrollment['amount_paid'] ?? 49.0
 $whatsappUrl  = htmlspecialchars($appConfig['whatsapp_community_url'], ENT_QUOTES, 'UTF-8');
 $supportEmail = htmlspecialchars($appConfig['support_email'], ENT_QUOTES, 'UTF-8');
 
-$subject = "Your Enrollment is Confirmed – Digital Crazy Hub";
+$subject = "Enrollment Confirmed – Digital Marketing Training Program | Digital Crazy Hub";
 
 $plain = <<<TEXT
 Dear {$enrollment['name']},

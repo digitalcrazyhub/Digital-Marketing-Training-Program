@@ -21,7 +21,7 @@ $route = trim((string)($_GET['route'] ?? ''), '/');
 if (empty($route)) {
     if (preg_match('#(?:/public)?/api(?:/index\.php)?/(.*)$#i', $uri, $matches)) {
         $route = trim($matches[1], '/');
-    } elseif (preg_match('#(?:/public)?/api/(create-enrollment|create-order|verify-payment|verify-status|webhook|download-invoice)(?:\.php)?#i', $uri, $matches)) {
+    } elseif (preg_match('#(?:/public)?/api/(submit-enrollment|create-enrollment|create-order|verify-payment|payment-status|verify-status|webhook|download-invoice)(?:\.php)?#i', $uri, $matches)) {
         $route = trim($matches[1], '/');
     }
 }
@@ -30,34 +30,36 @@ if (empty($route)) {
 $route = preg_replace('/\.php$/i', '', $route);
 
 switch ($route) {
+    case 'submit-enrollment':
     case 'create-enrollment':
     case 'enrollment/create':
-        require __DIR__ . '/api/enrollment/create.php';
+        require __DIR__ . '/api/submit-enrollment.php';
         break;
 
     case 'create-order':
     case 'payment/create-order':
-        require __DIR__ . '/api/payment/create-order.php';
+        require __DIR__ . '/api/create-order.php';
         break;
 
     case 'verify-payment':
     case 'payment/verify':
-        require __DIR__ . '/api/payment/verify.php';
+        require __DIR__ . '/api/verify-payment.php';
         break;
 
     case 'webhook':
     case 'webhook/razorpay':
-        require __DIR__ . '/api/webhook/razorpay.php';
+        require __DIR__ . '/api/webhook.php';
         break;
 
+    case 'payment-status':
     case 'verify-status':
     case 'status/verify':
-        require __DIR__ . '/api/status/verify.php';
+        require __DIR__ . '/api/payment-status.php';
         break;
 
     case 'download-invoice':
     case 'status/download-invoice':
-        require __DIR__ . '/api/status/download-invoice.php';
+        require __DIR__ . '/api/download-invoice.php';
         break;
 
     default:

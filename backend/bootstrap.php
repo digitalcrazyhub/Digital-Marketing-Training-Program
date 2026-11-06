@@ -86,12 +86,16 @@ spl_autoload_register(function (string $class) {
     // Explicit mappings for centralized backend architecture
     $classMap = [
         'App\Config\AppConfig'                     => BACKEND_DIR . '/config/app.php',
+        'App\Config\Config'                        => BACKEND_DIR . '/config/config.php',
         'App\Config\Database'                      => BACKEND_DIR . '/config/database.php',
         'App\Config\PaymentConfig'                 => BACKEND_DIR . '/config/payment.php',
         'App\Config\RazorpayConfig'                => BACKEND_DIR . '/config/payment.php',
         'App\Config\EmailConfig'                   => BACKEND_DIR . '/config/email.php',
         'App\Config\MailConfig'                    => BACKEND_DIR . '/config/email.php',
         'App\Config\GoogleSheetsConfig'            => BACKEND_DIR . '/config/google-sheets.php',
+        'App\Services\PaymentService'              => BACKEND_DIR . '/services/PaymentService.php',
+        'App\Services\CaptchaService'              => BACKEND_DIR . '/services/CaptchaService.php',
+        'App\Templates\InvoiceTemplate'            => BACKEND_DIR . '/templates/invoice-template.php',
         'App\Templates\Invoice\InvoicePdfTemplate' => BACKEND_DIR . '/templates/invoices/invoice-template.php'
     ];
 

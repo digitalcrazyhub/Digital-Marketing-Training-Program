@@ -1,6 +1,7 @@
 <?php
 /**
  * Digital Crazy Hub - Dedicated Google Sheets Configuration
+ * Exact 10-Column Architecture (Columns A through J)
  */
 
 declare(strict_types=1);
@@ -14,6 +15,8 @@ class GoogleSheetsConfig {
             'sheet_name'            => (string)env('GOOGLE_SHEETS_SHEET_NAME', 'Enrollments'),
             'service_account_email' => (string)env('GOOGLE_SERVICE_ACCOUNT_EMAIL', ''),
             'private_key'           => (string)env('GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY', ''),
+            
+            // Exact 10 Columns (A to J) matching master prompt specifications
             'columns'               => [
                 'A' => 'Enrollment ID',
                 'B' => 'Name',
@@ -24,25 +27,30 @@ class GoogleSheetsConfig {
                 'G' => 'Payment ID',
                 'H' => 'Workshop Date',
                 'I' => 'Workshop Time',
-                'J' => 'Amount Paid',
-                'K' => 'Payment Status'
+                'J' => 'Amount Paid Status'
             ],
+            
+            // Conditional formatting colors for Column J
+            // PAID: Light Green background (#D4EDDA), Dark Green bold text (#155724)
+            // UNPAID: Light Red background (#F8D7DA), Dark Red bold text (#721C24)
             'status_colors'         => [
-                'NOT PAID' => [
-                    'bg_red'   => 0.97,
-                    'bg_green' => 0.44,
-                    'bg_blue'  => 0.44,
-                    'fg_red'   => 1.0,
-                    'fg_green' => 1.0,
-                    'fg_blue'  => 1.0
-                ],
                 'PAID' => [
-                    'bg_red'   => 0.20,
-                    'bg_green' => 0.83,
-                    'bg_blue'  => 0.60,
-                    'fg_red'   => 1.0,
-                    'fg_green' => 1.0,
-                    'fg_blue'  => 1.0
+                    'bg_red'   => 0.831, // #D4
+                    'bg_green' => 0.929, // #ED
+                    'bg_blue'  => 0.855, // #DA
+                    'fg_red'   => 0.082, // #15
+                    'fg_green' => 0.341, // #57
+                    'fg_blue'  => 0.141, // #24
+                    'bold'     => true
+                ],
+                'UNPAID' => [
+                    'bg_red'   => 0.973, // #F8
+                    'bg_green' => 0.843, // #D7
+                    'bg_blue'  => 0.855, // #DA
+                    'fg_red'   => 0.447, // #72
+                    'fg_green' => 0.110, // #1C
+                    'fg_blue'  => 0.141, // #24
+                    'bold'     => true
                 ]
             ]
         ];

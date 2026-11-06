@@ -33,7 +33,7 @@ class InvoicePdfTemplate {
         $uuid = $this->sanitizeText($this->data['enrollment_id'] ?? ($this->data['uuid'] ?? 'DCH-PASS'));
         $paymentId = $this->sanitizeText($this->data['payment_id'] ?? 'PAID-RZP');
         $paidAt = $this->sanitizeText($this->data['paid_at'] ?? date('d M Y, h:i A'));
-        $workshopDate = $this->sanitizeText($this->data['workshop_date'] ?? 'November 5, 2026');
+        $workshopDate = $this->sanitizeText($this->data['workshop_date'] ?? 'November 24, 2026');
         $workshopTime = $this->sanitizeText($this->data['workshop_time'] ?? '7:00 PM IST');
         $amountPaid = number_format((float)($this->data['amount_paid'] ?? 49.00), 2);
         $invoiceNo = 'INV-' . $uuid;

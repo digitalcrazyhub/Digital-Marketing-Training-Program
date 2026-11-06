@@ -20,7 +20,7 @@ $workshopTime = htmlspecialchars($enrollment['workshop_time'] ?? $appConfig['wor
 $paymentId    = htmlspecialchars($enrollment['payment_id'] ?? 'PAID', ENT_QUOTES, 'UTF-8');
 $amountPaid   = '₹' . number_format((float)($enrollment['amount_paid'] ?? 49.00), 2);
 
-$subject = "New Paid Workshop Enrollment – {$enrollment['name']}";
+$subject = "New Paid Enrollment – {$studentName} – {$enrollmentId}";
 
 $plain = <<<TEXT
 New Paid Workshop Enrollment – {$enrollment['name']}

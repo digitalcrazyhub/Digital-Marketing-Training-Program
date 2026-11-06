@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Checkout | ₹49 AI-Integrated Digital Marketing Workshop | Digital Crazy Hub</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/DCH.png">
+
+  <!-- Google Fonts: Poppins & Noto Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+
+  <!-- Razorpay Checkout Script -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <!-- Modular Stylesheets (Zero Large Inline CSS) -->
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/reset.css">
+  <link rel="stylesheet" href="assets/css/global.css">
+  <link rel="stylesheet" href="assets/css/header.css">
+  <link rel="stylesheet" href="assets/css/payment.css">
+  <link rel="stylesheet" href="assets/css/footer.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+
+<body>
+
+  <!-- Top Dark Header Banner with Background Image & Light Box -->
+  <header class="checkout-hero-banner">
+    <div class="checkout-banner-lightbox">
+      <div class="checkout-brand-row">
+        <a href="index.html" class="checkout-brand-link" aria-label="Digital Crazy Hub Home">
+          <img src="assets/images/DCH.png" alt="Digital Crazy Hub" class="checkout-logo">
+          <span class="checkout-brand-title">
+            <i class="ph-bold ph-sparkle" style="color: #f97316;"></i>
+            AI - FIRST <span class="highlight-sub">MASTERCLASS</span>
+          </span>
+        </a>
+        <div class="checkout-divider"></div>
+        <span class="checkout-badge-title">Payment</span>
+      </div>
+
+      <h1 class="checkout-hero-headline">
+        You're One Step Away From Becoming AI-Ready.<br>
+        Future-Proof Your Career &amp; Business With Practical AI Skills
+      </h1>
+      <p class="checkout-hero-sub">
+        Live 3-Hour Masterclass on Zoom • November 24, 2026 @ 7:00 PM IST • Only ₹49
+      </p>
+
+      <button type="button" class="btn-banner-lightbox-preview" id="openBannerLightbox"
+        title="Preview 100% Practical Live Classroom Training">
+        <i class="ph-bold ph-arrows-out"></i>
+        <span>100% Practical Classroom Training Preview</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Fullscreen Banner Image Lightbox Modal -->
+  <div class="banner-img-lightbox" id="bannerImgLightbox" aria-hidden="true" role="dialog"
+    aria-label="Classroom Training Preview">
+    <div class="banner-img-lightbox-inner">
+      <button type="button" class="banner-img-lightbox-close" id="closeBannerLightbox"
+        aria-label="Close preview">&times;</button>
+      <img src="assets/images/Training/vels-college/vels-01.jpg"
+        alt="Digital Crazy Hub Practical Digital Marketing Training Classroom">
+      <div class="banner-img-lightbox-bar">
+        <span><i class="ph-bold ph-shield-check"></i> Digital Crazy Hub — 100% Practical Training &amp; Secure Checkout</span>
+        <span style="color: #93c5fd; font-size: 0.8rem;">Live Masterclass Session</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Checkout Section -->
+  <main class="checkout-main-section">
+    <div class="checkout-container">
+      <div class="checkout-title-wrap">
+        <h2 class="checkout-title">Checkout Here</h2>
+        <div class="trust-badges-row">
+          <div class="trust-seal seal-mcafee">
+            <i class="ph-bold ph-shield-check"></i>
+            <span>McAfee SECURE</span>
+          </div>
+          <div class="trust-seal seal-truste">
+            <i class="ph-bold ph-seal-check"></i>
+            <span>TRUSTe VERIFIED</span>
+          </div>
+          <div class="trust-seal seal-norton">
+            <i class="ph-bold ph-check-circle"></i>
+            <span>Norton SECURED</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-grid">
+        <!-- Left Column: Verified Candidate & Instant Payment Card -->
+        <div class="checkout-form-col">
+          <div class="checkout-card">
+            <!-- Dual Tabs Header (Matching Screenshot) -->
+            <div class="checkout-tabs-header">
+              <div class="tab-step-1" id="tabStep1">
+                <div class="tab-step-num">1</div>
+                <div class="tab-step-texts">
+                  <div class="tab-step-title" id="tabStep1Title">YOUR INFO</div>
+                  <div class="tab-step-sub" id="tabStep1Sub">YOUR ORDER INFO</div>
+                </div>
+              </div>
+              <div class="tab-step-2 tab-active" id="tabStep2">
+                <div class="tab-step-num">2</div>
+                <div class="tab-step-texts">
+                  <div class="tab-step-title">PAYMENT</div>
+                  <div class="tab-step-sub">YOUR PAYMENT INFO</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="checkout-card-body">
+              <div id="checkoutErrorBox" class="form-error-alert d-none"></div>
+
+              <!-- Instant Candidate Inputs (Pre-filled from Enrollment Form) -->
+              <div class="checkout-inputs-stack">
+                <div class="checkout-field-row">
+                  <input type="text" id="fullNameInput" name="name" class="checkout-input"
+                    placeholder="Full Name..." required autocomplete="name">
+                </div>
+
+                <div class="checkout-field-row">
+                  <input type="email" id="emailInput" name="email" class="checkout-input"
+                    placeholder="Email Address..." required autocomplete="email">
+                </div>
+
+                <div class="checkout-field-row">
+                  <div class="checkout-phone-input-wrap">
+                    <span class="phone-flag-icon">🇮🇳</span>
+                    <span class="phone-dropdown-arrow">▾</span>
+                    <input type="tel" id="phoneInput" name="phone" class="checkout-phone-input"
+                      placeholder="WhatsApp Number..." required autocomplete="tel" maxlength="15">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Order Summary Table (PAYMENT Section) -->
+              <div class="checkout-order-summary">
+                <div class="summary-section-label">PAYMENT</div>
+                <div class="summary-table">
+                  <div class="summary-row summary-head-row">
+                    <span class="col-item">Item</span>
+                    <span class="col-qty">Quantity</span>
+                    <span class="col-amt">Amount</span>
+                  </div>
+                  <div class="summary-row summary-item-row">
+                    <span class="col-item">AI - First MasterClass</span>
+                    <span class="col-qty">1</span>
+                    <span class="col-amt">₹49.00</span>
+                  </div>
+                  <div class="summary-row summary-total-row">
+                    <span class="col-item">Order Total</span>
+                    <span class="col-qty"></span>
+                    <span class="col-amt total-amount-val">₹49.00</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Complete Order CTA Button -->
+              <button type="button" id="completeOrderBtn" class="btn-complete-order">
+                <span class="btn-order-main">
+                  <i class="ph-bold ph-shopping-cart"></i> Complete Order
+                </span>
+                <span class="btn-order-sub">Easy EMI Available On Certain Bank</span>
+              </button>
+
+              <p class="btn-security-sub">* 100% Secure &amp; Safe Payments *</p>
+            </div>
+          </div>
+
+          <!-- Secure Payments Graphic (Below Left Card) -->
+          <div class="payments-powered-box">
+            <div class="payment-icons-strip">
+              <img class="payment-icon-image" src="assets/images/payment_secure.png"
+                alt="Payments Powered by Razorpay - UPI, Cards, NetBanking, EMI">
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Workshop Graphic Card & 6 Benefit Cards -->
+        <div class="checkout-features-col">
+          <!-- Workshop Graphic Banner -->
+          <div class="workshop-graphic-card">
+            <div class="graphic-badge">
+              <i class="ph-bold ph-sparkle"></i> AI - FIRST MASTERCLASS
+            </div>
+            <h3 class="graphic-title">AI-Integrated Digital Marketing Masterclass</h3>
+            <p class="graphic-tagline">
+              BUILD SMARTER, AUTOMATE EVERYTHING. LEAD THE AI REVOLUTION.
+            </p>
+            <div class="graphic-tools-row">
+              <span class="graphic-tool-badge">Claude</span>
+              <span class="graphic-tool-badge">n8n</span>
+              <span class="graphic-tool-badge">ChatGPT</span>
+              <span class="graphic-tool-badge">Meta Ads</span>
+              <span class="graphic-tool-badge">Google Ads</span>
+              <span class="graphic-tool-badge">SEO</span>
+              <span class="graphic-tool-badge">GA4</span>
+            </div>
+          </div>
+
+          <!-- 6 Feature Cards (Matching Screenshot) -->
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Master The Fundamentals Of Generative AI, AI AutoGen, CrewAI, LangGraph &amp; N8n</div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Create AI-Powered Workflows That Automate Real-World Tasks</div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Connect AI Agents With Your Favorite Tools, Apps, And Business Systems</div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Design And Deploy AI Solutions For Real-World Business Use Cases</div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Gain Hands-On Experience Through 3+ Live Demos, 10+ Guided Exercises &amp; Real-World Projects</div>
+          </div>
+
+          <div class="checkout-check-card">
+            <div class="checkout-check-icon"><i class="ph-bold ph-check"></i></div>
+            <div class="checkout-check-text">Master Modern Generative AI Tools And Prompt Engineering Techniques</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Dark Footer (Matching Screenshot) -->
+  <footer class="checkout-footer">
+    <div class="checkout-footer-content">
+      <div class="footer-brand-row">
+        <img src="assets/images/DCH.png" alt="Digital Crazy Hub" class="footer-logo">
+        <div class="footer-divider"></div>
+        <div class="footer-course-logo">
+          <i class="ph-bold ph-sparkle" style="color: #f97316;"></i>
+          <span>AI - FIRST MASTERCLASS</span>
+        </div>
+      </div>
+      <p class="footer-copy">
+        &copy; 2026 Digital Crazy Hub. All rights reserved. Registered under MSME, Government of India.
+      </p>
+      <p class="footer-disclaimer">
+        This Site Is Not A Part Of The Facebook Website Or Facebook Inc. Additionally, This Site Is NOT Endorsed By Facebook In Any Way. FACEBOOK Is A Trademark Of FACEBOOK, Inc. Important: Earnings And Legal Disclaimers Earnings And Income Representations Made By Digital Crazy Hub, And Their Advertisers/Sponsors Are Aspirational Statements Only Of Your Earnings Potential. The Success Of Our Clients, Testimonials And Other Examples Used Are Exceptional, Non-Typical Results And Are Not A Guarantee That You Or Others Will Achieve The Same Results. Individual Results Will Always Vary And Yours Will Depend Entirely On Your Individual Capacity, Work Ethic, Business Skills And Experience, Diligence In Working With Digital Marketing, The Normal And Unforeseen Risks Of Doing Business, And Other Factors.
+      </p>
+      <div class="footer-payment-badge">
+        <img class="payment-icon-image-footer" src="assets/images/payment_secure.png" alt="Payments Powered by Razorpay">
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modular Scripts -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/form-validation.js"></script>
+  <script src="assets/js/payment.js"></script>
+</body>
+
+</html>
